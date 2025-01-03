@@ -2,9 +2,18 @@ package org.firstinspires.ftc.teamcode.auto.commandFactory;
 
 import org.firstinspires.ftc.teamcode.auto.pedroCommands.FollowPath;
 import org.firstinspires.ftc.teamcode.auto.pedroPathing.pathGeneration.Point;
+import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetRotatorAngle;
+import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetSlideExtension;
+import org.firstinspires.ftc.teamcode.subsystems.arm.rotator.ArmRotatorSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.arm.slide.ArmSlideSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.claw.ClawConfiguration;
+import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawTwist;
 
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 public class ObservationCommandFactory extends CommandFactory {
     private boolean isBlueTeam;
@@ -42,7 +51,7 @@ public class ObservationCommandFactory extends CommandFactory {
     @Override
     public void initializePointsForBlueTeam() {
         startingPoint = new Point(9.6, 60);
-        toSpecimenScore = new Point(28, 60);
+        toSpecimenScore = new Point(37, 60);
         rotate = new Point(28.05, 60);
         toAllSamplesControl1 = new Point(29, 42.5);
         toAllSamplesControl2 = new Point(38.5, 29);
@@ -63,7 +72,25 @@ public class ObservationCommandFactory extends CommandFactory {
     @Override
     public SequentialCommandGroup getCommands() {
         return new SequentialCommandGroup(
-                new FollowPath(0, toSpecimenScore),
+                new ParallelCommandGroup(
+                        new FollowPath(0, toSpecimenScore),
+                        new SequentialCommandGroup(
+                                new WaitCommand(600),
+                                new SetRotatorAngle(103.5),
+                                new WaitUntilCommand(() -> VLRSubsystem.getInstance(ArmRotatorSubsystem.class).getAngleDegrees() >= 60),
+                                new SetClawTwist(ClawConfiguration.TargetTwist.NORMAL),
+                                new SetSlideExtension(0.36),
+                                new WaitUntilCommand(()-> VLRSubsystem.getInstance(ArmSlideSubsystem.class).reachedTargetPosition()),
+                                new WaitCommand(100)
+                        )
+                ),
+
+                new WaitCommand(100),
+                new SetSlideExtension(0.165),
+                new WaitUntilCommand(()-> VLRSubsystem.getInstance(ArmSlideSubsystem.class).reachedTargetPosition()),
+                new WaitCommand(20000),
+
+
                 new FollowPath(0, -90, rotate),
                 new WaitCommand(500),
                 new FollowPath(!isBlueTeam, toAllSamplesControl1, toAllSamplesControl2, toAllSamples),

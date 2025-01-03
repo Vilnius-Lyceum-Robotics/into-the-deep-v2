@@ -38,7 +38,7 @@ public class SecondStageHangCommand extends SequentialCommandGroup {
                 new OverrideSlideCoeffs(100, 0.55, 0.0005, 0.006, 0.0003, -0.6),
                 new InstantCommand(()-> VLRSubsystem.getInstance(ArmRotatorSubsystem.class).overrideArmCoeffs(0.4, 0.007)),
                 new SetSlideExtension(0.735),
-                new WaitCommand(500),
+                new WaitCommand(300),
                 new SetRotatorAngle(89),
                 new WaitUntilCommand(gamepadCondition),
                 new ResetSlideCoeffs(),

@@ -46,6 +46,7 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
         motionProfile.enableTelemetry(false);
 
         rotatorState = RotatorState.IN_ROBOT;
+        resetCoeffs();
     }
 
     public void setTargetAngle(TargetAngle targetAngle) {
@@ -62,7 +63,7 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
     }
 
     public double getAngleDegrees() {
-        return -encoderPosition / ENCODER_TICKS_PER_ROTATION * 360d;
+        return encoderPosition / ENCODER_TICKS_PER_ROTATION * 360d;
     }
 
     public boolean reachedTargetPosition() {
