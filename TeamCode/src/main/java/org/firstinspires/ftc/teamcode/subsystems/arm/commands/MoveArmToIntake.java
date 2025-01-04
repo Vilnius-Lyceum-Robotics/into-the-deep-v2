@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems.arm.commands;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.helpers.commands.CustomConditionalCommand;
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.arm.ArmState;
 import org.firstinspires.ftc.teamcode.subsystems.arm.rotator.ArmRotatorSubsystem;
@@ -20,7 +21,7 @@ public class MoveArmToIntake extends CustomConditionalCommand {
                 new SequentialCommandGroup(
                         new CustomConditionalCommand(
                                 new MoveArmInToRobot(),
-                                () -> (ArmState.get() == ArmState.State.DEPOSIT || ArmState.get() == ArmState.State.SECOND_STAGE_HANG)
+                                () -> (ArmState.get() == ArmState.State.DEPOSIT_BUCKET || ArmState.get() == ArmState.State.SECOND_STAGE_HANG)
                         ),
 
                         new SetClawAngle(TargetAngle.UP),

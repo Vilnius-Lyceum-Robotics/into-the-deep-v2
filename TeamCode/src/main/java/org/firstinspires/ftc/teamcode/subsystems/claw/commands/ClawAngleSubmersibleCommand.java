@@ -16,7 +16,7 @@ public class ClawAngleSubmersibleCommand extends SequentialCommandGroup {
             if (claw.getTargetAngle() == ClawConfiguration.TargetAngle.DOWN) {
                 claw.setClawState(ClawSubsystem.ClawState.CLOSED);
                 addCommands(new SetClawAngle(ClawConfiguration.TargetAngle.UP),
-                        new SetClawState(ClawConfiguration.TargetState.CLOSED_NORMAL));
+                        new SetClawState(ClawConfiguration.TargetState.CLOSED));
             } else if (claw.getTargetAngle() == ClawConfiguration.TargetAngle.UP) {
                 claw.setClawState(ClawSubsystem.ClawState.OPEN);
                 addCommands(new SetClawAngle(ClawConfiguration.TargetAngle.DOWN),

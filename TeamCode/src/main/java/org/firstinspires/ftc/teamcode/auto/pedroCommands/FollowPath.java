@@ -14,7 +14,7 @@ public class FollowPath extends CommandBase {
     private static Follower follower;
     private PathChain pathChain = null;
     private static Point lastPoint;
-    public static double translationalErrorConstraint = 5;
+    public static double translationalErrorConstraint = 1;
 
     public FollowPath(double constantHeading, Point point){
         pathChain = follower.pathBuilder().addPath(

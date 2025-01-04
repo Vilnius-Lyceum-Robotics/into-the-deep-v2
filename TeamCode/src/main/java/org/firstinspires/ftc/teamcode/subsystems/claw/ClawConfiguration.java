@@ -12,16 +12,18 @@ public interface ClawConfiguration {
 
     double angle_down_pos = 0;
     double angle_up_pos = 1;
+    double angle_hard_up_pos = 1.5;
+    double angle_straight_pos = 0.6;
     double angle_deposit_pos = 0.8;
 
     double twist_normal_pos = 0.05;
+    double twist_quarter_pos = 0.5;
     double twist_flipped_pos = 0.8;
 
     double TWIST_MIN = 0.04;
     double TWIST_MAX = 0.96;
 
-    double state_closed_normal_pos = 0;
-    double state_closed_forced_pos = 0;
+    double state_closed_pos = 0;
     double state_open_pos = 0.5;
 
     double analog_voltage_left = 0;
@@ -30,18 +32,20 @@ public interface ClawConfiguration {
 
     enum TargetAngle {
         DOWN,
+        HARD_UP,
         UP,
-        DEPOSIT
+        DEPOSIT,
+        STRAIGHT
     }
 
     enum TargetTwist {
         NORMAL,
+        QUARTER_TURN,
         FLIPPED
     }
 
     enum TargetState {
-        CLOSED_NORMAL,
-        CLOSED_FORCED,
+        CLOSED,
         OPEN
     }
 

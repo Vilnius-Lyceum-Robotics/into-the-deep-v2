@@ -29,11 +29,14 @@ public class ArmSlideConfiguration {
     public static double HORIZONTAL_EXTENSION_LIMIT = 650;
     public static double MAX_POSITION = 1200;
 
+    public static int WAIT_TIMEOUT = 4000;
 
     public enum TargetPosition {
         RETRACTED(0.0035),
         INTAKE(0.45),
-        DEPOSIT(0.985);
+        DEPOSIT_BUCKET(0.985),
+        DEPOSIT_SPECIMEN(0.45),
+        SCORE_SPECIMEN(0.1);
 
         public final double extension;
 

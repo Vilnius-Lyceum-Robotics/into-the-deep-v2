@@ -17,9 +17,6 @@ public class BlueObservationAuto extends VLRLinearOpMode {
     public void run() {
         AutoOpModeRunnner runner = new AutoOpModeRunnner(new ObservationCommandFactory(true), true);
         runner.initialize(hardwareMap);
-        CommandScheduler.getInstance().schedule(
-                new SetClawTwist(ClawConfiguration.TargetTwist.FLIPPED)
-        );
         waitForStart();
         runner.run(this::opModeIsActive, false);
     }

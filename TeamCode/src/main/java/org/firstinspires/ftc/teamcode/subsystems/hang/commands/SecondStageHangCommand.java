@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.arm.ArmState;
-import org.firstinspires.ftc.teamcode.subsystems.arm.commands.CustomConditionalCommand;
+import org.firstinspires.ftc.teamcode.helpers.commands.CustomConditionalCommand;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.MoveArmInToRobot;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.ResetSlideCoeffs;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetArmState;
@@ -25,7 +25,7 @@ public class SecondStageHangCommand extends SequentialCommandGroup {
         addCommands(
                 new CustomConditionalCommand(
                         new MoveArmInToRobot(),
-                        () -> (ArmState.get() == ArmState.State.INTAKE || ArmState.get() == ArmState.State.DEPOSIT)
+                        () -> (ArmState.get() == ArmState.State.INTAKE || ArmState.get() == ArmState.State.DEPOSIT_BUCKET)
                 ),
 
                 new SetClawAngle(ClawConfiguration.TargetAngle.UP),

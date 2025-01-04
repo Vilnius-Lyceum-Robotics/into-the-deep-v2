@@ -28,11 +28,11 @@ public class ArmRotatorConfiguration {
 
     public static double ENCODER_TICKS_PER_ROTATION = 8192;
 
-
     public enum TargetAngle {
         DOWN(0),
         INTAKE(0),
-        DEPOSIT(110);
+        DEPOSIT_BUCKET(110),
+        DEPOSIT_SPECIMEN(114);
 
         public final double angleDegrees;
 

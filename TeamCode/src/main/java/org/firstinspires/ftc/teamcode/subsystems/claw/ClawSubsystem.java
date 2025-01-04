@@ -35,15 +35,21 @@ public class ClawSubsystem extends VLRSubsystem<ClawSubsystem> implements ClawCo
         analogLeft = hardwareMap.get(AnalogInput.class, ANALOG_ENCODER_LEFT);
         analogRight = hardwareMap.get(AnalogInput.class, ANALOG_ENCODER_RIGHT);
 
-        setTargetAngle(TargetAngle.UP);
-        setTargetTwist(TargetTwist.NORMAL);
-        setTargetState(TargetState.CLOSED_NORMAL);
+        setTargetAngle(TargetAngle.HARD_UP);
+//        setTargetTwist(TargetTwist.NORMAL);
+        setTargetState(TargetState.CLOSED);
     }
 
 
     public void setTargetAngle(TargetAngle targetAngle) {
         this.targetAngle = targetAngle;
         switch (targetAngle) {
+            case HARD_UP:
+                angleServo.setPosition(angle_hard_up_pos);
+                break;
+            case STRAIGHT:
+                angleServo.setPosition(angle_straight_pos);
+                break;
             case UP:
                 angleServo.setPosition(angle_up_pos);
                 break;
@@ -60,11 +66,25 @@ public class ClawSubsystem extends VLRSubsystem<ClawSubsystem> implements ClawCo
         return targetAngle;
     }
 
+    public double getTwistServo() {
+        return twistServo.getPosition();
+    }
+
+    public void setTwistServo(double pos) {
+        twistServo.setPosition(pos);
+    }
+
+    public void setAngleServo(double pos){
+        twistServo.setPosition(pos);
+    }
 
     public void setTargetTwist(TargetTwist twistAngle) {
         switch (twistAngle) {
             case NORMAL:
                 twistServo.setPosition(twist_normal_pos);
+                break;
+            case QUARTER_TURN:
+                twistServo.setPosition(twist_quarter_pos);
                 break;
             case FLIPPED:
                 twistServo.setPosition(twist_flipped_pos);
@@ -82,11 +102,8 @@ public class ClawSubsystem extends VLRSubsystem<ClawSubsystem> implements ClawCo
             case OPEN:
                 grabServos.setPosition(state_open_pos);
                 break;
-            case CLOSED_NORMAL:
-                grabServos.setPosition(state_closed_normal_pos);
-                break;
-            case CLOSED_FORCED:
-                grabServos.setPosition(state_closed_forced_pos);
+            case CLOSED:
+                grabServos.setPosition(state_closed_pos);
                 break;
         }
         twistIncrement = 0;

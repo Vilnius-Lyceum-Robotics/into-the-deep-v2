@@ -14,7 +14,9 @@ public class ArmState {
     public enum State {
         IN_ROBOT,
         INTAKE,
-        DEPOSIT,
+        DEPOSIT_BUCKET,
+        DEPOSIT_SPECIMEN,
+        SCORE_SPECIMEN,
         SECOND_STAGE_HANG
     }
 }

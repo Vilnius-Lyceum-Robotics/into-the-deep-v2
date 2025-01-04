@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.helpers.commands.CustomConditionalCommand;
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.arm.ArmState;
 import org.firstinspires.ftc.teamcode.subsystems.arm.rotator.ArmRotatorConfiguration;
@@ -17,6 +18,8 @@ import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawAngle;
 import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawState;
 import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawTwist;
 
+import java.util.Arrays;
+
 public class MoveArmInToRobot extends SequentialCommandGroup {
     public MoveArmInToRobot() {
             ArmRotatorSubsystem arm = VLRSubsystem.getInstance(ArmRotatorSubsystem.class);
@@ -27,7 +30,7 @@ public class MoveArmInToRobot extends SequentialCommandGroup {
             addCommands(
                     new CustomConditionalCommand(
                             new SequentialCommandGroup(
-                                    new SetClawState(TargetState.CLOSED_NORMAL),
+                                    new SetClawState(TargetState.CLOSED),
                                     new WaitCommand(100),
                                     new SetClawAngle(TargetAngle.UP),
                                     new SetClawTwist(TargetTwist.NORMAL),
@@ -45,7 +48,7 @@ public class MoveArmInToRobot extends SequentialCommandGroup {
                                     new WaitCommand(200),
                                     new SetClawAngle(TargetAngle.DOWN),
                                     new WaitCommand(100),
-                                    new SetClawState(TargetState.CLOSED_NORMAL),
+                                    new SetClawState(TargetState.CLOSED),
                                     new SetSlideExtension(ArmSlideConfiguration.TargetPosition.RETRACTED),
                                     new WaitCommand(200),
                                     new SetClawAngle(TargetAngle.DEPOSIT),
@@ -57,7 +60,10 @@ public class MoveArmInToRobot extends SequentialCommandGroup {
                                             ArmState.State.IN_ROBOT
                                     )
                             ),
-                            () -> ArmState.get() == ArmState.State.DEPOSIT
+                            () -> {
+                                ArmState.State[] validPositions= {ArmState.State.DEPOSIT_SPECIMEN, ArmState.State.DEPOSIT_BUCKET, ArmState.State.SCORE_SPECIMEN};
+                                return Arrays.asList(validPositions).contains(ArmState.get());
+                            }
                     ),
 
                     new CustomConditionalCommand(

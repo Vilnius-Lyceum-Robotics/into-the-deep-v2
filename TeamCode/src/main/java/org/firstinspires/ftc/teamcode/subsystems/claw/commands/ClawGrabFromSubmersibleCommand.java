@@ -35,7 +35,7 @@ public class ClawGrabFromSubmersibleCommand extends SequentialCommandGroup {
             if (claw.getClawState() == ClawSubsystem.ClawState.OPEN) {
                 claw.setClawState(ClawSubsystem.ClawState.CLOSED);
                 addCommands(
-                        new SetClawState(ClawConfiguration.TargetState.CLOSED_NORMAL)
+                        new SetClawState(ClawConfiguration.TargetState.CLOSED)
                 );
             } else {
                 claw.setClawState(ClawSubsystem.ClawState.OPEN);

@@ -3,22 +3,33 @@ package org.firstinspires.ftc.teamcode.auto.commandFactory;
 import org.firstinspires.ftc.teamcode.auto.pedroCommands.FollowPath;
 import org.firstinspires.ftc.teamcode.auto.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.arm.ArmState;
+import org.firstinspires.ftc.teamcode.subsystems.arm.commands.MoveArmInToRobot;
+import org.firstinspires.ftc.teamcode.subsystems.arm.commands.MoveArmToSpecimenDeposit;
+import org.firstinspires.ftc.teamcode.subsystems.arm.commands.ScoreSpecimen;
+import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetArmState;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetRotatorAngle;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetSlideExtension;
 import org.firstinspires.ftc.teamcode.subsystems.arm.rotator.ArmRotatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.arm.slide.ArmSlideSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.claw.ClawConfiguration;
 import org.firstinspires.ftc.teamcode.subsystems.claw.ClawSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawAngle;
+import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawState;
 import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawTwist;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
+import com.arcrobotics.ftclib.command.PrintCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+@Config
 public class ObservationCommandFactory extends CommandFactory {
+    public static double toScoreX = 32;
     private boolean isBlueTeam;
-
     private Point startingPoint;
     private Point toSpecimenScore;
     /**
@@ -52,8 +63,8 @@ public class ObservationCommandFactory extends CommandFactory {
     @Override
     public void initializePointsForBlueTeam() {
         startingPoint = new Point(9.6, 60);
-        toSpecimenScore = new Point(37, 60);
-        rotate = new Point(28.05, 60);
+        toSpecimenScore = new Point(toScoreX, 60);
+        rotate = new Point(35, 60);
         toAllSamplesControl1 = new Point(29, 42.5);
         toAllSamplesControl2 = new Point(38.5, 29);
         toAllSamples = new Point(57.5, 29);
@@ -66,6 +77,7 @@ public class ObservationCommandFactory extends CommandFactory {
         toSample3Horizontal = new Point(57, 3.5);
         sample3ToObservation = new Point(21, 3.5);
     }
+
     @Override
     public Point getStartingPoint() {
         return startingPoint;
@@ -76,38 +88,52 @@ public class ObservationCommandFactory extends CommandFactory {
         return new Class[]{ArmSlideSubsystem.class, ArmRotatorSubsystem.class, ClawSubsystem.class};
     }
 
+    public static double rotatorAngle1 = 8;
+    public static double slideExtension = 0.37;
+    public static double rotatorAngle2 =30;
+
     @Override
     public SequentialCommandGroup getCommands() {
         return new SequentialCommandGroup(
-                new ParallelCommandGroup(
-                        new FollowPath(0, toSpecimenScore),
-                        new SequentialCommandGroup(
-                                new WaitCommand(600),
-                                new SetRotatorAngle(103.5),
-                                new WaitUntilCommand(() -> VLRSubsystem.getInstance(ArmRotatorSubsystem.class).getAngleDegrees() >= 60),
-                                new SetClawTwist(ClawConfiguration.TargetTwist.NORMAL),
-                                new SetSlideExtension(0.36),
-                                new WaitUntilCommand(()-> VLRSubsystem.getInstance(ArmSlideSubsystem.class).reachedTargetPosition()),
-                                new WaitCommand(100)
-                        )
-                ),
+                new SetClawState(ClawConfiguration.TargetState.OPEN),
+                new SetSlideExtension(slideExtension),
+                new SetRotatorAngle(rotatorAngle1),
+                new WaitCommand(1000),
+                new SetClawAngle(ClawConfiguration.TargetAngle.STRAIGHT),
+                new WaitCommand(1000),
+                new SetClawState(ClawConfiguration.TargetState.CLOSED),
+                new WaitCommand(1000),
+                new SetRotatorAngle(rotatorAngle2),
+                new SetArmState(ArmState.State.SCORE_SPECIMEN),
+                new MoveArmInToRobot()
 
-                new WaitCommand(100),
-                new SetSlideExtension(0.165),
-                new WaitUntilCommand(()-> VLRSubsystem.getInstance(ArmSlideSubsystem.class).reachedTargetPosition()),
-                new WaitCommand(20000),
-                new FollowPath(0, toSpecimenScore),
-                new FollowPath(0, -90, rotate),
-                new WaitCommand(500),
-                new FollowPath(!isBlueTeam, toAllSamplesControl1, toAllSamplesControl2, toAllSamples),
-                new FollowPath(0, toSample1Horizontal),
-                new FollowPath(0, sample1ToObservation),
-                new FollowPath(0, toSample1Vertical),
-                new FollowPath(0, toSample2Horizontal),
-                new FollowPath(0, sample2ToObservation),
-                new FollowPath(0, toSample2Vertical),
-                new FollowPath(0, toSample3Horizontal),
-                new FollowPath(0, sample3ToObservation)
+//                new SetArmState(ArmState.State.IN_ROBOT),
+//                new ParallelCommandGroup(
+//                        new FollowPath(0, toSpecimenScore),
+//                        new SequentialCommandGroup(
+//                                new SetClawTwist(ClawConfiguration.TargetTwist.QUARTER_TURN),
+//                                new WaitCommand(600),
+//                                new MoveArmToSpecimenDeposit()
+//                        )
+//                ),
+//
+//                new PrintCommand("SCORE SPECIMEN 0"),
+//                new ScoreSpecimen(),
+//                new PrintCommand("SCORE SPECIMEN 1"),
+//
+//                new MoveArmInToRobot(),
+//
+//                new FollowPath(0, -90, rotate),
+//                new WaitCommand(500),
+//                new FollowPath(!isBlueTeam, toAllSamplesControl1, toAllSamplesControl2, toAllSamples),
+//                new FollowPath(0, toSample1Horizontal),
+//                new FollowPath(0, sample1ToObservation),
+//                new FollowPath(0, toSample1Vertical),
+//                new FollowPath(0, toSample2Horizontal),
+//                new FollowPath(0, sample2ToObservation),
+//                new FollowPath(0, toSample2Vertical),
+//                new FollowPath(0, toSample3Horizontal),
+//                new FollowPath(0, sample3ToObservation)
         );
 
     }
