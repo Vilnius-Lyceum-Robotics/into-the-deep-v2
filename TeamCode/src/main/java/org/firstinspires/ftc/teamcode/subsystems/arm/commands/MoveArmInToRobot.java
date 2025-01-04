@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawAngle;
 import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawState;
 import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawTwist;
 
+import java.util.Arrays;
+
 public class MoveArmInToRobot extends SequentialCommandGroup {
     public MoveArmInToRobot() {
             ArmRotatorSubsystem arm = VLRSubsystem.getInstance(ArmRotatorSubsystem.class);
@@ -57,7 +59,10 @@ public class MoveArmInToRobot extends SequentialCommandGroup {
                                             ArmState.State.IN_ROBOT
                                     )
                             ),
-                            () -> ArmState.get() == ArmState.State.DEPOSIT
+                            () -> {
+                                ArmState.State[] validPositions= {ArmState.State.DEPOSIT_SPECIMEN, ArmState.State.DEPOSIT_BUCKET, ArmState.State.SCORE_SPECIMEN};
+                                return Arrays.asList(validPositions).contains(ArmState.get());
+                            }
                     ),
 
                     new CustomConditionalCommand(

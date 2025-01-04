@@ -15,6 +15,7 @@ public interface ClawConfiguration {
     double angle_deposit_pos = 0.8;
 
     double twist_normal_pos = 0.05;
+    double twist_quarter_pos = 0.5;
     double twist_flipped_pos = 0.8;
 
     double TWIST_MIN = 0.04;
@@ -30,12 +31,14 @@ public interface ClawConfiguration {
 
     enum TargetAngle {
         DOWN,
+        HARD_UP,
         UP,
         DEPOSIT
     }
 
     enum TargetTwist {
         NORMAL,
+        QUARTER_TURN,
         FLIPPED
     }
 

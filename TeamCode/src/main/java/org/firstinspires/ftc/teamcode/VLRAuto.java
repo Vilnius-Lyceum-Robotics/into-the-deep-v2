@@ -12,8 +12,10 @@ import org.firstinspires.ftc.teamcode.auto.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.auto.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.auto.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.helpers.opmode.VLRLinearOpMode;
+import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.helpers.utils.GlobalConfig;
 import org.firstinspires.ftc.teamcode.subsystems.arm.ArmState;
+import org.firstinspires.ftc.teamcode.subsystems.claw.ClawSubsystem;
 
 @Config
 @Photon
@@ -24,11 +26,15 @@ public class VLRAuto extends VLRLinearOpMode {
     private final double xStart = 9.6;
     private final double yStart = 60;
 
+    public static double pos = 0.5;
 
     @Override
     public void run() {
 
         GlobalConfig.setIsInvertedMotors(true);
+        VLRSubsystem.requireSubsystems(ClawSubsystem.class);
+        VLRSubsystem.initializeAll(hardwareMap);
+        ClawSubsystem claw = VLRSubsystem.getInstance(ClawSubsystem.class);
 
         follower = new Follower(hardwareMap);
         follower.setStartingPose(new Pose(xStart, yStart, 0));
@@ -37,13 +43,18 @@ public class VLRAuto extends VLRLinearOpMode {
         FollowPath.setStartingPoint(new Point(xStart, yStart));
         FollowPath.setFollower(follower);
 
-        waitForStart();
-        schedulePath();
+        claw.setTwistServo(pos);
 
-        CommandScheduler.getInstance().run();
+        waitForStart();
+//        schedulePath();
+
+//        CommandScheduler.getInstance().run();
 
         while (opModeIsActive()) {
-            follower.telemetryDebug(FtcDashboard.getInstance().getTelemetry());
+            telemetry.addData("servo: ",
+                    claw.getTwistServo()
+                    );
+
         }
     }
 

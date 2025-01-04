@@ -35,8 +35,8 @@ public class ClawSubsystem extends VLRSubsystem<ClawSubsystem> implements ClawCo
         analogLeft = hardwareMap.get(AnalogInput.class, ANALOG_ENCODER_LEFT);
         analogRight = hardwareMap.get(AnalogInput.class, ANALOG_ENCODER_RIGHT);
 
-        setTargetAngle(TargetAngle.UP);
-        setTargetTwist(TargetTwist.NORMAL);
+        setTargetAngle(TargetAngle.HARD_UP);
+//        setTargetTwist(TargetTwist.NORMAL);
         setTargetState(TargetState.CLOSED_NORMAL);
     }
 
@@ -44,6 +44,8 @@ public class ClawSubsystem extends VLRSubsystem<ClawSubsystem> implements ClawCo
     public void setTargetAngle(TargetAngle targetAngle) {
         this.targetAngle = targetAngle;
         switch (targetAngle) {
+            case HARD_UP:
+                angleServo.setPosition(1.5);
             case UP:
                 angleServo.setPosition(angle_up_pos);
                 break;
@@ -60,11 +62,25 @@ public class ClawSubsystem extends VLRSubsystem<ClawSubsystem> implements ClawCo
         return targetAngle;
     }
 
+    public double getTwistServo() {
+        return twistServo.getPosition();
+    }
+
+    public void setTwistServo(double pos) {
+        twistServo.setPosition(pos);
+    }
+
+    public void setAngleServo(double pos){
+        twistServo.setPosition(pos);
+    }
 
     public void setTargetTwist(TargetTwist twistAngle) {
         switch (twistAngle) {
             case NORMAL:
                 twistServo.setPosition(twist_normal_pos);
+                break;
+            case QUARTER_TURN:
+                twistServo.setPosition(twist_quarter_pos);
                 break;
             case FLIPPED:
                 twistServo.setPosition(twist_flipped_pos);
