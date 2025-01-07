@@ -51,7 +51,7 @@ public class FollowerConstants {
         rightFrontMotorDirection = GlobalConfig.INVERTED_MOTORS ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE;
         leftRearMotorDirection = GlobalConfig.INVERTED_MOTORS ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD;
         rightRearMotorDirection = GlobalConfig.INVERTED_MOTORS ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE;
-
+        // note: might need to make these more aggressive
         double headingProportionalGain = GlobalConfig.INVERTED_MOTORS ? -0.5 : 0.5;
         double headingDerivativeGain = GlobalConfig.INVERTED_MOTORS ? -0.0015 : 0.0015;
 

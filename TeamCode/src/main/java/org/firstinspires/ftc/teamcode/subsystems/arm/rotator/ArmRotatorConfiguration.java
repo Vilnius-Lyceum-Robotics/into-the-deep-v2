@@ -35,7 +35,8 @@ public class ArmRotatorConfiguration {
     public enum TargetAngle {
         DOWN(0),
         INTAKE(0),
-        DEPOSIT(110);
+        DEPOSIT_BUCKET(110),
+        DEPOSIT_SPECIMEN(105);
 
         public final double angleDegrees;
 

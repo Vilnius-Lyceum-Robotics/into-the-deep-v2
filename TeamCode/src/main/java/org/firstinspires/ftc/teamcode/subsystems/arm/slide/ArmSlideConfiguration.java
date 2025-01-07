@@ -41,7 +41,9 @@ public class ArmSlideConfiguration {
     public enum TargetPosition {
         RETRACTED(0.0035),
         INTAKE(0.45),
-        DEPOSIT(0.985);
+        DEPOSIT_BUCKET(0.985),
+        DEPOSIT_SPECIMEN(0.4),
+        SCORE_SPECIMEN(0.1);
 
         public final double extension;
 

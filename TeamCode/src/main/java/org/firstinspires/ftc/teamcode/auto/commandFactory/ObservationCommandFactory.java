@@ -3,22 +3,32 @@ package org.firstinspires.ftc.teamcode.auto.commandFactory;
 import org.firstinspires.ftc.teamcode.auto.pedroCommands.FollowPath;
 import org.firstinspires.ftc.teamcode.auto.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.arm.ArmState;
+import org.firstinspires.ftc.teamcode.subsystems.arm.commands.MoveArmInToRobot;
+import org.firstinspires.ftc.teamcode.subsystems.arm.commands.MoveArmToSpecimenDeposit;
+import org.firstinspires.ftc.teamcode.subsystems.arm.commands.ScoreSpecimen;
+import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetArmState;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetRotatorAngle;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetSlideExtension;
 import org.firstinspires.ftc.teamcode.subsystems.arm.rotator.ArmRotatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.arm.slide.ArmSlideSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.claw.ClawConfiguration;
 import org.firstinspires.ftc.teamcode.subsystems.claw.ClawSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawAngle;
 import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawTwist;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+@Config
 public class ObservationCommandFactory extends CommandFactory {
+    public static int wait = 100;
+    public static double toScoreX = 35.3;
     private boolean isBlueTeam;
-
     private Point startingPoint;
     private Point toSpecimenScore;
     /**
@@ -52,7 +62,7 @@ public class ObservationCommandFactory extends CommandFactory {
     @Override
     public void initializePointsForBlueTeam() {
         startingPoint = new Point(9.6, 60);
-        toSpecimenScore = new Point(37, 60);
+        toSpecimenScore = new Point(toScoreX, 60);
         rotate = new Point(28.05, 60);
         toAllSamplesControl1 = new Point(29, 42.5);
         toAllSamplesControl2 = new Point(38.5, 29);
@@ -66,6 +76,7 @@ public class ObservationCommandFactory extends CommandFactory {
         toSample3Horizontal = new Point(57, 3.5);
         sample3ToObservation = new Point(21, 3.5);
     }
+
     @Override
     public Point getStartingPoint() {
         return startingPoint;
@@ -82,20 +93,21 @@ public class ObservationCommandFactory extends CommandFactory {
                 new ParallelCommandGroup(
                         new FollowPath(0, toSpecimenScore),
                         new SequentialCommandGroup(
+                                new SetClawTwist(ClawConfiguration.TargetTwist.QUARTER_TURN),
                                 new WaitCommand(600),
-                                new SetRotatorAngle(103.5),
-                                new WaitUntilCommand(() -> VLRSubsystem.getInstance(ArmRotatorSubsystem.class).getAngleDegrees() >= 60),
-                                new SetClawTwist(ClawConfiguration.TargetTwist.NORMAL),
-                                new SetSlideExtension(0.36),
-                                new WaitUntilCommand(()-> VLRSubsystem.getInstance(ArmSlideSubsystem.class).reachedTargetPosition()),
-                                new WaitCommand(100)
+                                new MoveArmToSpecimenDeposit()
                         )
                 ),
 
                 new WaitCommand(100),
-                new SetSlideExtension(0.165),
-                new WaitUntilCommand(()-> VLRSubsystem.getInstance(ArmSlideSubsystem.class).reachedTargetPosition()),
-                new WaitCommand(20000),
+                new ScoreSpecimen(),
+                new WaitCommand(wait),
+                new ParallelRaceGroup(
+                    new MoveArmInToRobot(),
+                    new WaitCommand(3000)
+                ),
+
+//                new WaitCommand(20000),
                 new FollowPath(0, toSpecimenScore),
                 new FollowPath(0, -90, rotate),
                 new WaitCommand(500),
