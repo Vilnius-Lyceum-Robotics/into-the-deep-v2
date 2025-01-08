@@ -40,13 +40,7 @@ public interface ClawConfiguration {
     }
 
     enum TargetState {
-        CLOSED_NORMAL,
-        CLOSED_FORCED,
+        CLOSED,
         OPEN
-    }
-
-    enum ClawState {
-        OPEN,
-        CLOSED
     }
 }

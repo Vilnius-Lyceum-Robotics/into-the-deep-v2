@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Vector2d;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -25,11 +26,11 @@ public class Chassis extends VLRSubsystem<Chassis> implements ChassisConfigurati
     MotorEx MotorRightBack; 
 
     public static double motorPower = 1;
-    public static double acceleration_a = 0.96;
-    public static double deceleration_a = 0.7;
+    public static double acceleration_a = 0.9;
+    public static double deceleration_a = 0.6;
 
-    public static double forwardsMultiplier = 0.85;
-    public static double strafeMultiplier = 0.5;
+    public static double forwardsMultiplier = 0.95;
+    public static double strafeMultiplier = 0.7;
 
 
     public static double staticFrictionBar = 0.05;
@@ -63,15 +64,20 @@ public class Chassis extends VLRSubsystem<Chassis> implements ChassisConfigurati
         MotorRightFront.setInverted(true);
     }
 
-    public void drive(Pose2d positionVector) {
-        this.driveMotors(new MecanumDriveController(
-                strafeMultiplier * x_filter.estimatePower(positionVector.getX()),
-                forwardsMultiplier * y_filter.estimatePower(positionVector.getY()),
-                (positionVector.getHeading()) * 0.05
-        ));
-    }
+//    public void drive(Pose2d positionVector) {
+//        localizer.update();
+//        this.driveMotors(new MecanumDriveController(
+//                strafeMultiplier * x_filter.estimatePower(positionVector.getX()),
+//                forwardsMultiplier * y_filter.estimatePower(positionVector.getY()),
+//                (positionVector.getHeading()) * 0.05
+//        ));
+//    }
 
     public void drive(double xSpeed, double ySpeed, double zRotation) {
+        localizer.update();
+        Vector2d vector = new Vector2d(x_filter.estimatePower(xSpeed) * forwardsMultiplier, y_filter.estimatePower(ySpeed) * strafeMultiplier);
+
+        vector.rotateBy(Math.toDegrees(localizer.getPose().getHeading()));
         this.driveMotors(new MecanumDriveController(xSpeed, ySpeed, zRotation));
     }
 
@@ -111,5 +117,11 @@ public class Chassis extends VLRSubsystem<Chassis> implements ChassisConfigurati
 
     public void setPower(double power) {
         motorPower = Math.min(power, 1.0);
+    }
+
+
+    public enum isDriveFieldCentric{
+        YES,
+        NO
     }
 }
