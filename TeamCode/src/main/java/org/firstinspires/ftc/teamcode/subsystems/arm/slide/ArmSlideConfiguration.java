@@ -31,7 +31,7 @@ public class ArmSlideConfiguration {
     public static double CREEP = 50;
 
     public static double ERROR_MARGIN = 10;
-    public static double a = 0.6;
+    public static double a = 0.5;
 
     public static double MIN_POSITION = 0;
     public static double HORIZONTAL_EXTENSION_LIMIT = 650;

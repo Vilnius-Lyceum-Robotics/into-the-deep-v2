@@ -19,12 +19,12 @@ public class ArmRotatorConfiguration {
     public static double ACCELERATION_GAIN = 0.0001;
 
     public static double RETRACTED_FEEDFORWARD_GAIN = 0.12;
-    public static double EXTENDED_FEEDFORWARD_GAIN = 0.5;
+    public static double EXTENDED_FEEDFORWARD_GAIN = 0.3;
 
     public static double FEEDBACK_PROPORTIONAL_GAIN_HANG = 0.4;
     public static double FEEDBACK_INTEGRAL_GAIN_HANG = 0.007;
 
-    public static double ERROR_MARGIN = 2;
+    public static double ERROR_MARGIN = 10;
 
     public static double MIN_ANGLE = 0;
     public static double MAX_ANGLE = 150;
