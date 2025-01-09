@@ -79,6 +79,7 @@ public class ClawSubsystem extends VLRSubsystem<ClawSubsystem> implements ClawCo
 
 
     public void setTargetState(TargetState targetState) {
+        clawState = targetState;
         switch (targetState) {
             case OPEN:
                 grabServos.setPosition(state_open_pos);

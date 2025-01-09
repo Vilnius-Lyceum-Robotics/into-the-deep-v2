@@ -9,8 +9,8 @@ public class ArmRotatorConfiguration {
     public static String ENCODER_NAME = "MotorLeftFront";
 
     public static double ACCELERATION = 7000;
-    public static double DECELERATION = 1500;
-    public static double MAX_VELOCITY = 300;
+    public static double DECELERATION = 1200;
+    public static double MAX_VELOCITY = 290;
 
     public static double FEEDBACK_PROPORTIONAL_GAIN = 0.059;
     public static double FEEDBACK_INTEGRAL_GAIN = 0;

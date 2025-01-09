@@ -58,14 +58,12 @@ public class SecondaryDriverTeleOpControls extends DriverControls {
     }
 
     private void incrementClaw(double input) {
-        if (ArmState.get() == ArmState.State.INTAKE) {
-            claw.setTwistIncrement(input * 0.1);
-        }
+            claw.setTargetTwist(input);
     }
 
     private void incrementSlidePosition(double input) {
         if (ArmState.get() == ArmState.State.INTAKE) {
-            slide.incrementTargetPosition(input * 0.06);
+            slide.incrementTargetPosition(input * 4);
         }
     }
 }
