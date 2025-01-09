@@ -29,6 +29,7 @@ public class Chassis extends VLRSubsystem<Chassis> implements ChassisConfigurati
 
     public static double forwardsMultiplier = 0.95;
     public static double strafeMultiplier = 0.7;
+    public static double turnMultiplier = 0.3;
 
 
     public static double staticFrictionBar = 0.05;
@@ -65,6 +66,11 @@ public class Chassis extends VLRSubsystem<Chassis> implements ChassisConfigurati
     }
 
 
+    public void resetIMU(){
+        pinpoint.resetPosAndIMU();
+    }
+
+
     public void enableRobotCentric(){
         isDriveFieldCentric = false;
     }
@@ -88,7 +94,7 @@ public class Chassis extends VLRSubsystem<Chassis> implements ChassisConfigurati
         Vector2d vector = new Vector2d(x_filter.estimatePower(xSpeed) * forwardsMultiplier, y_filter.estimatePower(ySpeed) * strafeMultiplier);
 
         if (isDriveFieldCentric) vector = vector.rotateBy(-Math.toDegrees(pinpoint.getHeading()));
-        this.driveMotors(new MecanumDriveController(vector.getX(), vector.getY(), zRotation));
+        this.driveMotors(new MecanumDriveController(vector.getX(), vector.getY(), zRotation * turnMultiplier));
     }
 
     private void driveMotors(MecanumDriveController driveController) {

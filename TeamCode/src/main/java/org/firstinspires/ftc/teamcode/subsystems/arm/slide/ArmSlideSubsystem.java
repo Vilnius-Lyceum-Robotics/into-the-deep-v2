@@ -121,7 +121,7 @@ public class ArmSlideSubsystem extends VLRSubsystem<ArmSlideSubsystem> {
         double power = filter.estimate(motionProfile.getPower(getPosition(), armAngleDegrees));
 
         if (reachedTargetPosition()){
-            motionProfile.setOperationMode(MotionProfile.OperationMode.USE_INTEGRAL);
+            //motionProfile.setOperationMode(MotionProfile.OperationMode.USE_INTEGRAL);
             extensionMotor0.setPower(0);
             extensionMotor2.setPower(0);
 
@@ -145,7 +145,7 @@ public class ArmSlideSubsystem extends VLRSubsystem<ArmSlideSubsystem> {
 
             extensionMotor0.setPower(power);
             extensionMotor1.setPower(power);
-            //extensionMotor2.setPower(power);
+            extensionMotor2.setPower(power);
         }
 
             Telemetry telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry());

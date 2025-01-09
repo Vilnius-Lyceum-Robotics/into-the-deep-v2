@@ -33,5 +33,6 @@ public class PrimaryDriverTeleOpControls extends DriverControls {
 
         add(new ButtonCtl(GamepadKeys.Button.DPAD_UP, ButtonCtl.Trigger.WAS_JUST_PRESSED, true, (Boolean a) -> cs.schedule(new SecondStageHangCommand(()-> (gamepad.left_bumper && gamepad.right_bumper)))));
         add(new ButtonCtl(GamepadKeys.Button.DPAD_DOWN, ButtonCtl.Trigger.WAS_JUST_PRESSED, true, (Boolean b) -> cs.schedule(new MoveArmInToRobot())));
+        add(new ButtonCtl(GamepadKeys.Button.RIGHT_BUMPER, ButtonCtl.Trigger.WAS_JUST_PRESSED, true, (Boolean b) -> chassis.resetIMU()));
     }
 }
