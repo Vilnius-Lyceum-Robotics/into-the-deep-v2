@@ -30,18 +30,18 @@ public class ArmSlideConfiguration {
 
     public static double CREEP = 50;
 
-    public static double ERROR_MARGIN = 20;
+    public static double ERROR_MARGIN = 30;
     public static double a = 0.5;
 
     public static double MIN_POSITION = 0;
-    public static double HORIZONTAL_EXTENSION_LIMIT = 650;
-    public static double MAX_POSITION = 1230;
+    public static double HORIZONTAL_EXTENSION_LIMIT = 750;
+    public static double MAX_POSITION = 1260;
 
 
     public enum TargetPosition {
-        RETRACTED(0.0025),
+        RETRACTED(0.004),
         INTAKE(0.45),
-        DEPOSIT(0.98);
+        DEPOSIT(0.99);
 
         public final double extension;
 
