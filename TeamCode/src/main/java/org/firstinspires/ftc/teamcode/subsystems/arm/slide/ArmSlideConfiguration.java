@@ -31,7 +31,7 @@ public class ArmSlideConfiguration {
 
     public static double CREEP = 40;
 
-    public static double ERROR_MARGIN = 10;
+    public static double ERROR_MARGIN = 20;
     public static double ERROR_TIMEOUT_MILLIS = 3000; // ms before position is automatically classified as reached
 
     public static double MIN_POSITION = 0;
@@ -42,7 +42,7 @@ public class ArmSlideConfiguration {
     public enum TargetPosition {
         RETRACTED(0.0025),
         INTAKE(0.45),
-        DEPOSIT(0.98);
+        DEPOSIT(0.985);
 
         public final double extension;
 
