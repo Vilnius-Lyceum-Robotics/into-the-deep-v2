@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.commandFactory;
+package org.firstinspires.ftc.teamcode.auto.commands.factory;
 
 import org.firstinspires.ftc.teamcode.auto.pedroCommands.FollowPath;
 import org.firstinspires.ftc.teamcode.auto.pedroPathing.pathGeneration.Point;
@@ -94,20 +94,20 @@ public class ObservationCommandFactory extends CommandFactory {
 
                 new WaitCommand(100),
                 new SetSlideExtension(0.165),
-                new WaitUntilCommand(()-> VLRSubsystem.getInstance(ArmSlideSubsystem.class).reachedTargetPosition()),
-                new WaitCommand(20000),
-                new FollowPath(0, toSpecimenScore),
-                new FollowPath(0, -90, rotate),
-                new WaitCommand(500),
-                new FollowPath(!isBlueTeam, toAllSamplesControl1, toAllSamplesControl2, toAllSamples),
-                new FollowPath(0, toSample1Horizontal),
-                new FollowPath(0, sample1ToObservation),
-                new FollowPath(0, toSample1Vertical),
-                new FollowPath(0, toSample2Horizontal),
-                new FollowPath(0, sample2ToObservation),
-                new FollowPath(0, toSample2Vertical),
-                new FollowPath(0, toSample3Horizontal),
-                new FollowPath(0, sample3ToObservation)
+                new WaitUntilCommand(()-> VLRSubsystem.getInstance(ArmSlideSubsystem.class).reachedTargetPosition())
+//                new WaitCommand(20000),
+//                new FollowPath(0, toSpecimenScore),
+//                new FollowPath(0, -90, rotate),
+//                new WaitCommand(500),
+//                new FollowPath(!isBlueTeam, toAllSamplesControl1, toAllSamplesControl2, toAllSamples),
+//                new FollowPath(0, toSample1Horizontal),
+//                new FollowPath(0, sample1ToObservation),
+//                new FollowPath(0, toSample1Vertical),
+//                new FollowPath(0, toSample2Horizontal),
+//                new FollowPath(0, sample2ToObservation),
+//                new FollowPath(0, toSample2Vertical),
+//                new FollowPath(0, toSample3Horizontal),
+//                new FollowPath(0, sample3ToObservation)
         );
 
     }
