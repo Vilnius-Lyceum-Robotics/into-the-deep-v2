@@ -34,7 +34,7 @@ public class RetractArm extends SequentialCommandGroup {
                                 new WaitCommand(100),
                                 new SetClawAngle(TargetAngle.UP),
                                 new WaitCommand(80),
-                                new SetRotatorAngle(ArmRotatorConfiguration.TargetAngle.DOWN), // Just in case the state gets bugged
+                                new SetRotatorAngle(ArmRotatorConfiguration.TargetAngle.RETRACT), // Just in case the state gets bugged
                                 new SetSlideExtension(ArmSlideConfiguration.TargetPosition.RETRACTED),
                                 new WaitUntilCommand(slides::reachedTargetPosition),
                                 new SetCurrentArmState(ArmState.State.IN_ROBOT)
@@ -54,7 +54,7 @@ public class RetractArm extends SequentialCommandGroup {
                                 new SetClawAngle(TargetAngle.DEPOSIT),
                                 new WaitUntilCommand(slides::reachedTargetPosition),
                                 new SetClawAngle(TargetAngle.UP),
-                                new SetRotatorAngle(ArmRotatorConfiguration.TargetAngle.DOWN),
+                                new SetRotatorAngle(ArmRotatorConfiguration.TargetAngle.RETRACT),
                                 new WaitUntilCommand(arm::reachedTargetPosition),
                                 new SetCurrentArmState(
                                         ArmState.State.IN_ROBOT
@@ -68,7 +68,7 @@ public class RetractArm extends SequentialCommandGroup {
                                 new SetClawAngle(TargetAngle.UP),
                                 new SetSlideExtension(ArmSlideConfiguration.TargetPosition.RETRACTED),
                                 new WaitUntilCommand(slides::reachedTargetPosition),
-                                new SetRotatorAngle(ArmRotatorConfiguration.TargetAngle.DOWN),
+                                new SetRotatorAngle(ArmRotatorConfiguration.TargetAngle.RETRACT),
                                 new WaitUntilCommand(arm::reachedTargetPosition),
                                 new SetCurrentArmState(ArmState.State.IN_ROBOT)
                         ),

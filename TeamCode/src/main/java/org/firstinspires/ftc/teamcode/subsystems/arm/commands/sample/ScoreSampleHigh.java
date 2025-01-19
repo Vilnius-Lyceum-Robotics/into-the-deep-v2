@@ -36,7 +36,7 @@ public class ScoreSampleHigh extends CustomConditionalCommand {
                         ),
                         new SetIsArmMoving(),
 
-                        new SetRotatorAngle(ArmRotatorConfiguration.TargetAngle.DEPOSIT),
+                        new SetRotatorAngle(ArmRotatorConfiguration.TargetAngle.SCORE_SAMPLE_HIGH),
                         new WaitUntilCommand(() -> VLRSubsystem.getInstance(ArmRotatorSubsystem.class).getAngleDegrees() >= 30),
                         new SetClawAngle(TargetAngle.DOWN),
 
