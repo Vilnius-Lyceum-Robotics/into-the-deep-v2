@@ -83,11 +83,14 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
     }
 
     public void setHangCoefficients(){
-        motionProfile.updateCoefficients(ACCELERATION, DECELERATION, MAX_VELOCITY, FEEDBACK_PROPORTIONAL_GAIN_HANG, FEEDBACK_INTEGRAL_GAIN_HANG, FEEDBACK_DERIVATIVE_GAIN, VELOCITY_GAIN, ACCELERATION_GAIN);
+        motionProfile.updateCoefficients(ACCELERATION_HANG, DECELERATION_HANG, MAX_VELOCITY_HANG, FEEDBACK_PROPORTIONAL_GAIN_HANG, FEEDBACK_INTEGRAL_GAIN_HANG, FEEDBACK_DERIVATIVE_GAIN, VELOCITY_GAIN, ACCELERATION_GAIN);
+        motionProfile.setFeedForwardGain(FEEDFORWARD_GAIN_HANG);
     }
 
     public void setDefaultCoefficients(){
         motionProfile.updateCoefficients(ACCELERATION, DECELERATION, MAX_VELOCITY, FEEDBACK_PROPORTIONAL_GAIN, FEEDBACK_INTEGRAL_GAIN, FEEDBACK_DERIVATIVE_GAIN, VELOCITY_GAIN, ACCELERATION_GAIN);
+        double currentFeedForwardGain = mapToRange(slideSubsystem.getPosition(), ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, RETRACTED_FEEDFORWARD_GAIN, EXTENDED_FEEDFORWARD_GAIN);
+        motionProfile.setFeedForwardGain(currentFeedForwardGain);
     }
 
 
@@ -95,22 +98,20 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
     public void periodic() {
         encoderPosition = thoughBoreEncoder.getCurrentPosition();
 
-        if (GlobalConfig.DEBUG_MODE){
-            FtcDashboard.getInstance().getTelemetry().addLine("DEBUG MODE ENABLED, USING DEFAULT PIDs FOR ARM TUNING");
-            setDefaultCoefficients();
-        }
-
         double currentAngle = getAngleDegrees();
-        double currentFeedForwardGain = mapToRange(slideSubsystem.getPosition(), ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, RETRACTED_FEEDFORWARD_GAIN, EXTENDED_FEEDFORWARD_GAIN);
 
         FtcDashboard.getInstance().getTelemetry().addData("Rotator Angle", currentAngle);
-
-        motionProfile.setFeedForwardGain(currentFeedForwardGain);
-
         double power = motionProfile.getPower(currentAngle);
 
-        if (motionProfile.getTargetPosition() == TargetAngle.DOWN.angleDegrees && reachedTargetPosition()){
-            power = 0;
+        if (slideSubsystem.getOperationMode() == ArmSlideConfiguration.OperationMode.NORMAL) {
+            setDefaultCoefficients();
+
+            if (motionProfile.getTargetPosition() == TargetAngle.DOWN.angleDegrees && reachedTargetPosition()) {
+                power = 0;
+            }
+        }
+        else{
+            setHangCoefficients();
         }
         motor.setPower(power);
         slideSubsystem.periodic(currentAngle);

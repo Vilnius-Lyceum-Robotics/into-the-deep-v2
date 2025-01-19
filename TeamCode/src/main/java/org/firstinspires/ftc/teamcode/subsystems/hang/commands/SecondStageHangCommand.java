@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems.hang.commands;
 
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -8,12 +7,12 @@ import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.arm.ArmState;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.CustomConditionalCommand;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.MoveArmInToRobot;
-import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetDefaultCoefficients;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetArmState;
-import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetHangCoefficients;
+import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetArmOperationMode;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetRotatorAngle;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetSlideExtension;
 import org.firstinspires.ftc.teamcode.subsystems.arm.rotator.ArmRotatorSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.arm.slide.ArmSlideConfiguration;
 import org.firstinspires.ftc.teamcode.subsystems.arm.slide.ArmSlideSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.claw.ClawConfiguration;
 import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawAngle;
@@ -37,7 +36,7 @@ public class SecondStageHangCommand extends SequentialCommandGroup {
                 new SetArmState(ArmState.State.SECOND_STAGE_HANG),
                 // hang off 2nd
                 new WaitUntilCommand(gamepadCondition),
-                new SetHangCoefficients(),
+                new SetArmOperationMode(ArmSlideConfiguration.OperationMode.HANG),
                 new SetSlideExtension(0.5),
                 new SetHangPosition(HangConfiguration.TargetPosition.HALF),
                 new WaitCommand(500),
