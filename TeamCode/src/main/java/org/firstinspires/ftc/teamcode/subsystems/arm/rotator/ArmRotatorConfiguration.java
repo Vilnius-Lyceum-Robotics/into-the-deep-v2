@@ -17,9 +17,19 @@ public class ArmRotatorConfiguration {
     public static double FEEDBACK_DERIVATIVE_GAIN = 0.00045;
     public static double VELOCITY_GAIN = 0.003;
     public static double ACCELERATION_GAIN = 0.00005;
+    public static double FEEDFORWARD_GAIN = 0.12;
 
-    public static double RETRACTED_FEEDFORWARD_GAIN = 0.12;
+
+    public static double EXTENDED_ACCELERATION = 2000;
+    public static double EXTENDED_DECELERATION = 200;
+    public static double EXTENDED_MAX_VELOCITY = 60;
+    public static double EXTENDED_FEEDBACK_PROPORTIONAL_GAIN = 0.06;
+    public static double EXTENDED_FEEDBACK_INTEGRAL_GAIN = 0.000001;
+    public static double EXTENDED_FEEDBACK_DERIVATIVE_GAIN = 0.0003;
+    public static double EXTENDED_VELOCITY_GAIN = 0.002;
+    public static double EXTENDED_ACCELERATION_GAIN = 0.00003;
     public static double EXTENDED_FEEDFORWARD_GAIN = 0.3;
+
 
 
     public static double ACCELERATION_HANG = 1000;
@@ -31,7 +41,7 @@ public class ArmRotatorConfiguration {
 
 
 
-    public static double ERROR_MARGIN = 20;
+    public static double ERROR_MARGIN = 5;
 
     public static double MIN_ANGLE = 0;
     public static double MAX_ANGLE = 150;

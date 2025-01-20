@@ -88,9 +88,20 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
     }
 
     public void setDefaultCoefficients(){
-        motionProfile.updateCoefficients(ACCELERATION, DECELERATION, MAX_VELOCITY, FEEDBACK_PROPORTIONAL_GAIN, FEEDBACK_INTEGRAL_GAIN, FEEDBACK_DERIVATIVE_GAIN, VELOCITY_GAIN, ACCELERATION_GAIN);
-        double currentFeedForwardGain = mapToRange(slideSubsystem.getPosition(), ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, RETRACTED_FEEDFORWARD_GAIN, EXTENDED_FEEDFORWARD_GAIN);
-        motionProfile.setFeedForwardGain(currentFeedForwardGain);
+        double slidePosition = slideSubsystem.getPosition();
+        double p = mapToRange(slidePosition, ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, FEEDBACK_PROPORTIONAL_GAIN, EXTENDED_FEEDBACK_PROPORTIONAL_GAIN);
+        double i = mapToRange(slidePosition, ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, FEEDBACK_INTEGRAL_GAIN, EXTENDED_FEEDBACK_INTEGRAL_GAIN);
+        double d = mapToRange(slidePosition, ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, FEEDBACK_DERIVATIVE_GAIN, EXTENDED_FEEDBACK_DERIVATIVE_GAIN);
+        double v = mapToRange(slidePosition, ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, VELOCITY_GAIN, EXTENDED_VELOCITY_GAIN);
+        double a = mapToRange(slidePosition, ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, ACCELERATION_GAIN, EXTENDED_ACCELERATION_GAIN);
+
+        double acceleration = mapToRange(slidePosition, ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, ACCELERATION, EXTENDED_ACCELERATION);
+        double deceleration = mapToRange(slidePosition, ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, DECELERATION, EXTENDED_DECELERATION);
+        double maxVelocity = mapToRange(slidePosition, ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, MAX_VELOCITY, EXTENDED_MAX_VELOCITY);
+        double feedforward = mapToRange(slidePosition, ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, FEEDFORWARD_GAIN, EXTENDED_FEEDFORWARD_GAIN);
+
+        motionProfile.updateCoefficients(acceleration, deceleration, maxVelocity, p, i, d, v, a);
+        motionProfile.setFeedForwardGain(feedforward);
     }
 
 
