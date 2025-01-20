@@ -94,9 +94,6 @@ public class ArmSlideSubsystem extends VLRSubsystem<ArmSlideSubsystem> {
 
 
     public double getPosition() {
-        if (GlobalConfig.INVERTED_ARM_ENCODERS) {
-            return -encoderPosition;
-        }
         return encoderPosition;
     }
 

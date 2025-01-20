@@ -52,8 +52,8 @@ public class FollowerConstants {
         leftRearMotorDirection = GlobalConfig.INVERTED_MOTORS ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD;
         rightRearMotorDirection = GlobalConfig.INVERTED_MOTORS ? DcMotorSimple.Direction.FORWARD : DcMotorSimple.Direction.REVERSE;
 
-        double headingProportionalGain = GlobalConfig.INVERTED_MOTORS ? -0.5 : 0.5;
-        double headingDerivativeGain = GlobalConfig.INVERTED_MOTORS ? -0.0015 : 0.0015;
+        double headingProportionalGain = GlobalConfig.INVERTED_MOTORS ? -0.4 : 0.4;
+        double headingDerivativeGain = GlobalConfig.INVERTED_MOTORS ? -0.001 : 0.001;
 
         headingPIDFCoefficients = new CustomPIDFCoefficients(
                 headingProportionalGain,
@@ -180,9 +180,9 @@ public class FollowerConstants {
 
     // These activate / deactivate the secondary PIDs. These take over at errors under a set limit for
     // the translational, heading, and drive PIDs.
-    public static boolean useSecondaryTranslationalPID = true;
+    public static boolean useSecondaryTranslationalPID = false;
     public static boolean useSecondaryHeadingPID = false;
-    public static boolean useSecondaryDrivePID = true;
+    public static boolean useSecondaryDrivePID = false;
 
 
     // the limit at which the translational PIDF switches between the main and secondary translational PIDFs,
