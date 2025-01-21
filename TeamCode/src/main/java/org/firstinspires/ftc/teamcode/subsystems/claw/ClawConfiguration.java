@@ -10,9 +10,9 @@ public interface ClawConfiguration {
     String ANALOG_ENCODER_LEFT = "analog0";
     String ANALOG_ENCODER_RIGHT = "analog1";
 
-    double angle_down_pos = 0;
-    double angle_up_pos = 0.9;
-    double angle_deposit_pos = 0.85;
+    double angle_down_pos = 0.9;
+    double angle_up_pos = 0.07;
+    double angle_deposit_pos = 0.4;
 
     double twist_normal_pos = 0.5;
     double twist_flipped_pos = 0.8;
@@ -21,11 +21,7 @@ public interface ClawConfiguration {
     double TWIST_MAX = 0.96;
 
     double state_closed_normal_pos = 0;
-    double state_closed_forced_pos = 0;
-    double state_open_pos = 0.8;
-
-    double analog_voltage_left = 0;
-    double analog_voltage_right = 0;
+    double state_open_pos = 0.925;
 
 
     enum TargetAngle {

@@ -10,16 +10,16 @@ import org.firstinspires.ftc.teamcode.subsystems.claw.ClawSubsystem;
 
 public class ToggleClawAngle extends ConditionalCommand {
     public ToggleClawAngle() {
-
         super(
                 new SequentialCommandGroup(
                         new SetClawState(ClawConfiguration.TargetState.CLOSED),
                         new SetClawAngle(ClawConfiguration.TargetAngle.DOWN),
-                        new WaitCommand(150),
+                        new WaitCommand(50),
                         new SetClawState(ClawConfiguration.TargetState.OPEN)
                 ),
                 new SequentialCommandGroup(
                         new SetClawState(ClawConfiguration.TargetState.CLOSED),
+                        new WaitCommand(200),
                         new SetClawAngle(ClawConfiguration.TargetAngle.UP)
                 ),
                 () -> VLRSubsystem.getInstance(ClawSubsystem.class).getTargetAngle() == ClawConfiguration.TargetAngle.UP)
