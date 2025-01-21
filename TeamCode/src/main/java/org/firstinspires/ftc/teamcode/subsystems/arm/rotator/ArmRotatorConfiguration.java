@@ -12,7 +12,7 @@ public class ArmRotatorConfiguration {
     public static double DECELERATION = 1300;
     public static double MAX_VELOCITY = 310;
 
-    public static double FEEDBACK_PROPORTIONAL_GAIN = 0.095;
+    public static double FEEDBACK_PROPORTIONAL_GAIN = 0.075;
     public static double FEEDBACK_INTEGRAL_GAIN = 0;
     public static double FEEDBACK_DERIVATIVE_GAIN = 0.00045;
     public static double VELOCITY_GAIN = 0.003;
@@ -31,12 +31,14 @@ public class ArmRotatorConfiguration {
 
     public static double ENCODER_TICKS_PER_ROTATION = 8192;
 
+    public static double PREPARE_SPECIMEN_HIGH = 103.5;
 
     public enum TargetAngle {
-        DOWN(0),
-        INTAKE(0),
-        DEPOSIT(110);
-
+        RETRACT(0),
+        INTAKE_SAMPLE(0),
+        SCORE_SAMPLE_HIGH(110),
+        PREPARE_SPECIMEN_HIGH(103.5),
+        INTAKE_SPECIMEN(25);
         public final double angleDegrees;
 
         TargetAngle(double angleDegrees) {

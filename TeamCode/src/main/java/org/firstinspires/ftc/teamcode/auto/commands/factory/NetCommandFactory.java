@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.auto.commandFactory;
+package org.firstinspires.ftc.teamcode.auto.commands.factory;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
+import com.outoftheboxrobotics.photoncore.Photon;
 
 import org.firstinspires.ftc.teamcode.auto.pedroCommands.FollowPath;
 import org.firstinspires.ftc.teamcode.auto.pedroPathing.pathGeneration.Point;
-import org.firstinspires.ftc.teamcode.helpers.commands.GrabBucketSample;
-import org.firstinspires.ftc.teamcode.helpers.commands.ScoreBucketSample;
+import org.firstinspires.ftc.teamcode.auto.commands.GrabBucketSample;
+import org.firstinspires.ftc.teamcode.auto.commands.ScoreHighBucketSample;
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.arm.rotator.ArmRotatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.arm.slide.ArmSlideSubsystem;
@@ -15,8 +15,10 @@ import org.firstinspires.ftc.teamcode.subsystems.claw.ClawConfiguration;
 import org.firstinspires.ftc.teamcode.subsystems.claw.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.claw.commands.SetClawTwist;
 
-import java.lang.reflect.WildcardType;
+import java.util.function.IntConsumer;
+
 @Config
+@Photon
 public class NetCommandFactory extends CommandFactory {
     private int scoreHeading;
     private int sample1Heading;
@@ -29,22 +31,36 @@ public class NetCommandFactory extends CommandFactory {
     private Point toSample3;
     private Point toNetArea;
 
+
     public NetCommandFactory(boolean isBlueTeam){
         initializeHeadings();
         initializePointsForBlueTeam();
         if(!isBlueTeam){
             Point[] allPoints = {
-                    startingPoint, toScore, toSamples1And2, toSample3
+                    startingPoint, toScore, toSamples1And2, toSample3, toNetArea
             };
             mirrorPointsToRedTeam(allPoints);
         }
     }
 
+    private int calculateSampleHeading(Point samplePoint){
+        return (int) Math.toDegrees(Math.atan2(samplePoint.getY() - startingPoint.getY(), samplePoint.getX() - startingPoint.getX()));
+    }
+
     private void initializeHeadings(){
+        Point sample1 = new Point(1,1);
+        Point sample2 = new Point(1,1);
+        Point sample3 = new Point(1,1);
+
         scoreHeading = -50;
-        sample1Heading = -13;
-        sample2Heading = 5;
-        sample3Heading = 28;
+
+//        sample1Heading = -13;
+//        sample2Heading = 5;
+//        sample3Heading = 28;
+
+        sample1Heading = calculateSampleHeading(sample1);
+        sample2Heading = calculateSampleHeading(sample2);
+        sample3Heading = calculateSampleHeading(sample3);
     }
     @Override
     public void initializePointsForBlueTeam(){
@@ -69,27 +85,27 @@ public class NetCommandFactory extends CommandFactory {
     @Override
     public SequentialCommandGroup getCommands(){
         return new SequentialCommandGroup(
-                new SetClawTwist(ClawConfiguration.TargetTwist.NORMAL),
+                new SetClawTwist(ClawConfiguration.HorizontalRotation.NORMAL),
                 new FollowPath(0, scoreHeading, toScore),
-                new ScoreBucketSample(),
+                new ScoreHighBucketSample(),
 
                 new FollowPath(scoreHeading, sample1Heading, toSamples1And2),
                 new GrabBucketSample(),
 
                 new FollowPath(sample1Heading, scoreHeading, toScore),
-                new ScoreBucketSample(),
+                new ScoreHighBucketSample(),
 
                 new FollowPath(scoreHeading, sample2Heading, toSamples1And2),
                 new GrabBucketSample(),
 
                 new FollowPath(sample2Heading, scoreHeading, toScore),
-                new ScoreBucketSample(),
+                new ScoreHighBucketSample(),
 
                 new FollowPath(scoreHeading, sample3Heading, toSample3),
                 new GrabBucketSample(),
 
                 new FollowPath(sample3Heading, scoreHeading, toScore),
-                new ScoreBucketSample(),
+                new ScoreHighBucketSample(),
 
                 new FollowPath(scoreHeading, toNetArea)
         );

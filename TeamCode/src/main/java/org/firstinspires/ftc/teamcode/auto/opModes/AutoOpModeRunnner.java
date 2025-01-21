@@ -5,7 +5,7 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.auto.commandFactory.CommandFactory;
+import org.firstinspires.ftc.teamcode.auto.commands.factory.CommandFactory;
 import org.firstinspires.ftc.teamcode.auto.pedroCommands.FollowPath;
 import org.firstinspires.ftc.teamcode.auto.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.auto.pedroPathing.localization.Pose;
@@ -48,6 +48,7 @@ public class AutoOpModeRunnner {
 
     public void run(BooleanSupplier isActive, boolean enableDebug) {
         while (isActive.getAsBoolean()) {
+            follower.update();
             if (enableDebug) {
                 follower.telemetryDebug(telemetry);
             }

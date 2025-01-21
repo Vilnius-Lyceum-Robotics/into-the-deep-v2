@@ -15,12 +15,10 @@ public class ClawSubsystem extends VLRSubsystem<ClawSubsystem> implements ClawCo
     private Servo angleServo, twistServo, grabServos;
     private AnalogInput analogLeft, analogRight;
 
-    private double twistIncrement;
+    private VerticalRotation targetAngle = VerticalRotation.UP;
+    private GripperState clawState = GripperState.CLOSED;
 
-    private TargetAngle targetAngle = TargetAngle.UP;
-    private TargetState clawState = TargetState.CLOSED;
-
-    public TargetState getClawState() {
+    public GripperState getClawState() {
         return clawState;
     }
 
@@ -32,71 +30,42 @@ public class ClawSubsystem extends VLRSubsystem<ClawSubsystem> implements ClawCo
         analogLeft = hardwareMap.get(AnalogInput.class, ANALOG_ENCODER_LEFT);
         analogRight = hardwareMap.get(AnalogInput.class, ANALOG_ENCODER_RIGHT);
 
-        setTargetAngle(TargetAngle.UP);
-        setTargetTwist(TargetTwist.NORMAL);
-        setTargetState(TargetState.CLOSED);
+        setTargetAngle(VerticalRotation.UP);
+        setHorizontalRotation(HorizontalRotation.NORMAL);
+        setTargetState(GripperState.CLOSED);
     }
 
 
-    public void setTargetAngle(TargetAngle targetAngle) {
-        switch (targetAngle) {
-            case UP:
-                angleServo.setPosition(angle_up_pos);
-                this.targetAngle = TargetAngle.UP;
-                break;
-            case DOWN:
-                angleServo.setPosition(angle_down_pos);
-                this.targetAngle = TargetAngle.DOWN;
-                break;
-            case DEPOSIT:
-                angleServo.setPosition(angle_deposit_pos);
-                this.targetAngle = TargetAngle.UP;
-                break;
-        }
+    public void setTargetAngle(VerticalRotation rotation) {
+        this.targetAngle = rotation;
+        angleServo.setPosition(rotation.pos);
     }
 
-    public TargetAngle getTargetAngle() {
+    public void setTargetAngle(double pos){
+        angleServo.setPosition(pos);
+    }
+
+    public VerticalRotation getTargetAngle() {
         return targetAngle;
     }
 
+    public void setHorizontalRotation(HorizontalRotation rotation) {
+        twistServo.setPosition(rotation.pos);
+    }
 
-    public void setTargetTwist(TargetTwist twistAngle) {
-        switch (twistAngle) {
-            case NORMAL:
-                twistServo.setPosition(twist_normal_pos);
-                break;
-            case FLIPPED:
-                twistServo.setPosition(twist_flipped_pos);
-                break;
-        }
+    public void setHorizontalRotation(double rotationPos) {
+        twistServo.setPosition(clamp((1 + rotationPos) * 0.5, HORIZONTAL_ROTATION_MIN, HORIZONTAL_ROTATION_MAX));
     }
 
 
-    public void setTargetTwist(double twistAngle) {
-        //twist angle from 0 to 1, while 0.5 is normal pos, 0 is 90 degrees to one side, 1 is 90 degrees to another
-        //map joystick to [-0.5; 0.5] and add 0.5
-        double position = twist_normal_pos - (twistAngle / 2);
-        twistServo.setPosition(clamp(position, TWIST_MIN, TWIST_MAX));
+    public void setTargetState(GripperState state) {
+        clawState = state;
+        grabServos.setPosition(state.pos);
     }
 
-
-    public void setTwistIncrement(double increment) {
-        twistIncrement = increment;
+    public boolean isSamplePresent() {
+        return analogLeft.getVoltage() > analog_voltage_left && analogRight.getVoltage() > analog_voltage_right;
     }
-
-
-    public void setTargetState(TargetState targetState) {
-        clawState = targetState;
-        switch (targetState) {
-            case OPEN:
-                grabServos.setPosition(state_open_pos);
-                break;
-            case CLOSED:
-                grabServos.setPosition(state_closed_normal_pos);
-                break;
-        }
-    }
-
 
     @Override
     public void periodic() {

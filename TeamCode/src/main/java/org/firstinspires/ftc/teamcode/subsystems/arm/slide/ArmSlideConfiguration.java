@@ -32,7 +32,7 @@ public class ArmSlideConfiguration {
     public static double CREEP = 40;
 
     public static double ERROR_MARGIN = 20;
-    public static double ERROR_TIMEOUT_MILLIS = 3000; // ms before position is automatically classified as reached
+    public static double ERROR_TIMEOUT_MILLIS = 1000; // ms before position is automatically classified as reached
 
     public static double MIN_POSITION = 0;
     public static double HORIZONTAL_EXTENSION_LIMIT = 650;
@@ -40,11 +40,16 @@ public class ArmSlideConfiguration {
     public static double TICKS_PER_IN = 17.97 * 2.54;
     public static double MAX_EXTENSION_IN = HORIZONTAL_EXTENSION_LIMIT / TICKS_PER_IN;
 
+    public static double INTAKE_SPECIMEN = 0.05;
+
 
     public enum TargetPosition {
         RETRACTED(0.0025),
-        INTAKE(0.45), // 30.8cm
-        DEPOSIT(0.985);
+        INTAKE_SAMPLE(0.45), // 30.8cm
+        SCORE_BUCKET_HIGH(1.02),
+        PREPARE_SPECIMEN_HIGH(0.45),
+        SCORE_SPECIMEN_HIGH(0.165),
+        INTAKE_SPECIMEN(0.45);
 
         public final double extension;
 
