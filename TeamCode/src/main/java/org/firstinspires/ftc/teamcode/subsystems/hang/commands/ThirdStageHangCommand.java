@@ -4,10 +4,10 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
+import org.firstinspires.ftc.teamcode.helpers.commands.CustomConditionalCommand;
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.arm.ArmState;
-import org.firstinspires.ftc.teamcode.subsystems.arm.commands.CustomConditionalCommand;
-import org.firstinspires.ftc.teamcode.subsystems.arm.commands.MoveArmInToRobot;
+import org.firstinspires.ftc.teamcode.subsystems.arm.commands.RetractArm;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetArmOperationMode;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetRotatorAngle;
 import org.firstinspires.ftc.teamcode.subsystems.arm.commands.SetSlideExtension;
@@ -23,11 +23,11 @@ public class ThirdStageHangCommand extends SequentialCommandGroup {
         addRequirements(VLRSubsystem.getRotator(), VLRSubsystem.getSlides());
         addCommands(
                 new CustomConditionalCommand(
-                        new MoveArmInToRobot(),
-                        () -> (ArmState.get() == ArmState.State.INTAKE || ArmState.get() == ArmState.State.DEPOSIT)
+                        new RetractArm(),
+                        () -> (ArmState.get() == ArmState.State.INTAKE_SAMPLE || ArmState.get() == ArmState.State.SCORE_SAMPLE_HIGH)
                 ),
 
-                new SetClawAngle(ClawConfiguration.TargetAngle.UP),
+                new SetClawAngle(ClawConfiguration.VerticalRotation.UP),
                 new SetRotatorAngle(103.5),
                 new WaitUntilCommand(()-> VLRSubsystem.getRotator().getAngleDegrees() >= 50),
                 new SetSlideExtension(0.31),

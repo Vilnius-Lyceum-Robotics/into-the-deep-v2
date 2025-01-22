@@ -7,16 +7,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.helpers.opmode.VLRLinearOpMode;
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.helpers.utils.GlobalConfig;
-import org.firstinspires.ftc.teamcode.subsystems.arm.rotator.ArmRotatorConfiguration;
 import org.firstinspires.ftc.teamcode.subsystems.arm.rotator.ArmRotatorSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.arm.slide.ArmSlideConfiguration;
 import org.firstinspires.ftc.teamcode.subsystems.arm.slide.ArmSlideSubsystem;
 
 @Photon
 @Config
-@TeleOp(name = "ArmMotionProfileTuningWSubsystemAngleDegrees")
+@TeleOp(name = "MotionProfileTuningWPositions")
 
-public class ArmSubsystemTest2 extends VLRLinearOpMode {
+public class MotionProfileTestWPositions extends VLRLinearOpMode {
     ArmRotatorSubsystem armSubsystem;
     ArmSlideSubsystem slides;
     public static double angle = 0;

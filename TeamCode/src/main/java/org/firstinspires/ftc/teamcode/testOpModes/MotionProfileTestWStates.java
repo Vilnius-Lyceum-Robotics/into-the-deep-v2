@@ -14,9 +14,9 @@ import org.firstinspires.ftc.teamcode.subsystems.arm.slide.ArmSlideSubsystem;
 
 @Photon
 @Config
-@TeleOp(name = "ArmMotionProfileTuningWSubsystem")
+@TeleOp(name = "MotionProfileTuningWStates")
 
-public class ArmSubsystemTest extends VLRLinearOpMode {
+public class MotionProfileTestWStates extends VLRLinearOpMode {
     ArmRotatorSubsystem armSubsystem;
     public static ArmRotatorConfiguration.TargetAngle targetAngle = ArmRotatorConfiguration.TargetAngle.RETRACT;
     public static ArmSlideConfiguration.TargetPosition targetPosition = ArmSlideConfiguration.TargetPosition.RETRACTED;
