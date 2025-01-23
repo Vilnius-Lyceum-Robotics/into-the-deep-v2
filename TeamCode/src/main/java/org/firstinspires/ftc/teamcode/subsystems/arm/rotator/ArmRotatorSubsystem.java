@@ -101,7 +101,7 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
 //        double feedforward = mapToRange(slidePosition, ArmSlideConfiguration.MIN_POSITION, ArmSlideConfiguration.MAX_POSITION, FEEDFORWARD_GAIN, EXTENDED_FEEDFORWARD_GAIN);
 //
 //        motionProfile.updateCoefficients(acceleration, deceleration, maxVelocity, p, i, d, v, a);
-//        motionProfile.setFeedForwardGain(feedforward);
+        motionProfile.setFeedForwardGain(FEEDFORWARD_GAIN);
         motionProfile.updateCoefficients(ACCELERATION, DECELERATION, MAX_VELOCITY, FEEDBACK_PROPORTIONAL_GAIN, FEEDBACK_INTEGRAL_GAIN, FEEDBACK_DERIVATIVE_GAIN, VELOCITY_GAIN, ACCELERATION_GAIN);
     }
 
@@ -125,6 +125,11 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
             setHangCoefficients();
         }
         motor.setPower(power);
-        slideSubsystem.periodic(currentAngle);
+
+        if (slideSubsystem.forceCalibrateSlides()){
+            slideSubsystem.setMotorPower(-0.4);
+            slideSubsystem.checkLimitSwitch();
+        }
+        else slideSubsystem.periodic(currentAngle);
     }
 }

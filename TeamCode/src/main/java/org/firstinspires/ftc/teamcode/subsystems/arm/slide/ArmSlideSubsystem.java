@@ -36,6 +36,7 @@ public class ArmSlideSubsystem extends VLRSubsystem<ArmSlideSubsystem> {
     private double lastPositionChangeTime = 0;
 
     private OperationMode operationMode = OperationMode.NORMAL;
+    private boolean forceCalibrateSlides = false;
 
 
     @Override
@@ -155,6 +156,14 @@ public class ArmSlideSubsystem extends VLRSubsystem<ArmSlideSubsystem> {
 
     public void setOperationMode(OperationMode operationMode){
         this.operationMode = operationMode;
+    }
+
+    public void setPowerOverride(boolean state){
+        forceCalibrateSlides = state;
+    }
+
+    public boolean forceCalibrateSlides(){
+        return forceCalibrateSlides;
     }
 
 

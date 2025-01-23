@@ -28,6 +28,8 @@ public class ThirdStageHangCommand extends SequentialCommandGroup {
                         () -> !ArmState.isCurrentState(ArmState.State.IN_ROBOT, ArmState.State.THIRD_STAGE_HANG)
                 ),
 
+                new ForceCalibrateSlides(),
+
                 new SetClawAngle(ClawConfiguration.VerticalRotation.UP),
                 new SetRotatorAngle(103.5),
                 new WaitUntilCommand(()-> VLRSubsystem.getRotator().getAngleDegrees() >= 50),
