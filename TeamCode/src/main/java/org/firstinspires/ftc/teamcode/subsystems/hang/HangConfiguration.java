@@ -7,6 +7,12 @@ public interface HangConfiguration {
     String LEFT_AXON = "leftHang";
     String RIGHT_AXON = "rightHang";
 
+    String LEFT_ANALOG = "leftAnalog";
+    String RIGHT_ANALOG = "rightAnalog";
+
+    double leftAnalogThreshold = 0;
+    double rightAnalogThreshold = 0;
+
     enum TargetPosition {
         DOWN (0),
         HALF(0.75),

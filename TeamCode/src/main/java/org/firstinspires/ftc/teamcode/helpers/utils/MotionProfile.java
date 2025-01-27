@@ -128,8 +128,7 @@ public class MotionProfile {
 
         double positionSetPoint = initialPosition + Math.signum(positionError) * motionState.position;
 
-        if (positionSetPoint == targetPosition) reachedPosition = true;
-        else reachedPosition = false;
+        reachedPosition = positionSetPoint == targetPosition;
 
         double positionPower = pid.calculate(currentPosition, positionSetPoint);
         double velocityPower = motionState.velocity * velocityGain * Math.signum(positionError);

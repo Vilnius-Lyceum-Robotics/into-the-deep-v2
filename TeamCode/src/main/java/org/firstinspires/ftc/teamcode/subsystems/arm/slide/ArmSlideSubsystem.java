@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.helpers.utils.MotionProfile;
 import org.firstinspires.ftc.teamcode.subsystems.arm.ArmState;
@@ -31,6 +31,8 @@ public class ArmSlideSubsystem extends VLRSubsystem<ArmSlideSubsystem> {
     private double feedForward = FEED_FORWARD_GAIN;
 
     private OperationMode operationMode = OperationMode.NORMAL;
+
+    private boolean overridePower = false;
 
 
     @Override
@@ -157,6 +159,16 @@ public class ArmSlideSubsystem extends VLRSubsystem<ArmSlideSubsystem> {
         extensionMotor0.setPower(power);
         extensionMotor1.setPower(power);
         extensionMotor2.setPower(power);
+    }
+
+
+    public void setPowerOverride(boolean condition){
+        overridePower = condition;
+    }
+
+
+    public boolean getPowerOverride(){
+        return overridePower;
     }
 
 

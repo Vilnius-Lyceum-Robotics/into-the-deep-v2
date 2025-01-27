@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.helpers.utils.MotionProfile;
 import org.firstinspires.ftc.teamcode.subsystems.arm.ArmState;
@@ -127,7 +127,14 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
         } else {
             setHangCoefficients();
         }
+
         motor.setPower(power);
-        slideSubsystem.periodic(currentAngle);
+
+        if (!slideSubsystem.getPowerOverride()){
+            slideSubsystem.periodic(currentAngle);
+        }
+        else{
+            slideSubsystem.checkLimitSwitch();
+        }
     }
 }
