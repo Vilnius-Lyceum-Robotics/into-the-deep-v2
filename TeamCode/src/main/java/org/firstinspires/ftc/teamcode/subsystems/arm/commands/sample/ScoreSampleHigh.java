@@ -31,7 +31,7 @@ public class ScoreSampleHigh extends CustomConditionalCommand {
     }
 
     public static int ROTATOR = 117;
-    public static double SLIDE = 1.02;
+    public static double SLIDE = 1;
 
     public ScoreSampleHigh(int rotator) {
         super(new SequentialCommandGroup(
@@ -45,7 +45,7 @@ public class ScoreSampleHigh extends CustomConditionalCommand {
                         new WaitUntilCommand(() -> VLRSubsystem.getInstance(ArmRotatorSubsystem.class).getAngleDegrees() >= 30),
                         new SetClawAngle(VerticalRotation.DOWN),
 
-                        new WaitUntilCommand(VLRSubsystem.getInstance(ArmRotatorSubsystem.class)::reachedTargetPosition),
+                        new WaitUntilCommand(()-> VLRSubsystem.getRotator().getAngleDegrees() >= 75),
                         new SetSlideExtension(SLIDE),
 
                         new WaitUntilCommand(VLRSubsystem.getInstance(ArmSlideSubsystem.class)::reachedTargetPosition),

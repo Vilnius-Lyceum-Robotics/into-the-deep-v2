@@ -8,26 +8,40 @@ public class ArmRotatorConfiguration {
     public static String MOTOR_NAME = "MotorRotator";
     public static String ENCODER_NAME = "MotorRightBack"; // PORT 3 CONTOR LHUB
 
-    public static double ACCELERATION = 8000;
-    public static double DECELERATION = 1100;
-    public static double MAX_VELOCITY = 300;
+    //ACCELERATION PROFILE CONSTANTS:
+//    public static double ACCELERATION = 8000;
+//    public static double DECELERATION = 1100;
+//    public static double MAX_VELOCITY = 300;
+//
+//    public static double FEEDBACK_PROPORTIONAL_GAIN = 0.075;
+//    public static double FEEDBACK_INTEGRAL_GAIN = 0;
+//    public static double FEEDBACK_DERIVATIVE_GAIN = 0.00045;
+//    public static double VELOCITY_GAIN = 0.003;
+//    public static double ACCELERATION_GAIN = 0.00005;
+//    public static double FEEDFORWARD_GAIN = 0.12;
 
-    public static double FEEDBACK_PROPORTIONAL_GAIN = 0.075;
+
+    //JERK PROFILE CONSTANTS:
+    public static double ACCELERATION_JERK = 25000;
+    public static double DECELERATION_JERK = 20000;
+    public static double MAX_VELOCITY = 370;
+
+    public static double FEEDBACK_PROPORTIONAL_GAIN = 0.07;
     public static double FEEDBACK_INTEGRAL_GAIN = 0;
-    public static double FEEDBACK_DERIVATIVE_GAIN = 0.00045;
-    public static double VELOCITY_GAIN = 0.003;
-    public static double ACCELERATION_GAIN = 0.00005;
-    public static double FEEDFORWARD_GAIN = 0.12;
+    public static double FEEDBACK_DERIVATIVE_GAIN = 0.002;
+    public static double VELOCITY_GAIN = 0.002;
+    public static double ACCELERATION_GAIN = 0.00008;
+    public static double FEEDFORWARD_GAIN = 0.13;
 
 
-    public static double EXTENDED_ACCELERATION = 2000;
-    public static double EXTENDED_DECELERATION = 200;
-    public static double EXTENDED_MAX_VELOCITY = 60;
-    public static double EXTENDED_FEEDBACK_PROPORTIONAL_GAIN = 0.06;
-    public static double EXTENDED_FEEDBACK_INTEGRAL_GAIN = 0.000001;
-    public static double EXTENDED_FEEDBACK_DERIVATIVE_GAIN = 0.0003;
-    public static double EXTENDED_VELOCITY_GAIN = 0.002;
-    public static double EXTENDED_ACCELERATION_GAIN = 0.00003;
+    public static double EXTENDED_ACCELERATION_JERK = 2000;
+    public static double EXTENDED_DECELERATION_JERK = 900;
+    public static double EXTENDED_MAX_VELOCITY = 70;
+    public static double EXTENDED_FEEDBACK_PROPORTIONAL_GAIN = 0.068;
+    public static double EXTENDED_FEEDBACK_INTEGRAL_GAIN = 0.00001;
+    public static double EXTENDED_FEEDBACK_DERIVATIVE_GAIN = 0.0038;
+    public static double EXTENDED_VELOCITY_GAIN = 0.00045;
+    public static double EXTENDED_ACCELERATION_GAIN = 0.00005;
     public static double EXTENDED_FEEDFORWARD_GAIN = 0.3;
 
 

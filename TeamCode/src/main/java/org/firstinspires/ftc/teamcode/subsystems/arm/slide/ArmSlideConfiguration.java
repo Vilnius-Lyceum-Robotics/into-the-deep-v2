@@ -11,14 +11,14 @@ public class ArmSlideConfiguration {
 
     public static String LIMIT_SW_NAME = "SlideLimit";
 
-    public static double ACCELERATION = 26000;
-    public static double DECELERATION = 16000;
-    public static double MAX_VELOCITY = 2100;
+    public static double ACCELERATION_JERK = 100000;
+    public static double DECELERATION_JERK = 80000;
+    public static double MAX_VELOCITY = 2300;
     public static double FEEDBACK_PROPORTIONAL_GAIN = 0.0085;
     public static double FEEDBACK_INTEGRAL_GAIN = 0;
     public static double FEEDBACK_DERIVATIVE_GAIN = 0.0003;
     public static double FEED_FORWARD_GAIN = 0.1;
-    public static double VELOCITY_GAIN = 0.0001;
+    public static double VELOCITY_GAIN = 0.00015;
     public static double ACCELERATION_GAIN = 0.00001;
 
 
@@ -47,7 +47,7 @@ public class ArmSlideConfiguration {
 
 
     public enum TargetPosition {
-        RETRACTED(0.0025),
+        RETRACTED(0),
         INTAKE_SAMPLE(0.45), // 30.8cm
         SCORE_BUCKET_HIGH(1.02),
         PREPARE_SPECIMEN_HIGH(0.45),
