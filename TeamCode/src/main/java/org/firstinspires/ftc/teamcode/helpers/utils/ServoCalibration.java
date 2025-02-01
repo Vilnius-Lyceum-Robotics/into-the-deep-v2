@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp
 @Photon
 public class ServoCalibration extends LinearOpMode {
+    private boolean prevState = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -22,10 +23,11 @@ public class ServoCalibration extends LinearOpMode {
             telemetry.update();
 
 
-            if (gamepad1.a) {
+            if (gamepad1.a && !prevState) {
                  current_i++;
                  current_i %= servoNames.length;
                  location = 0;
+                 prevState = gamepad1.a;
             }
 
             if (gamepad1.dpad_up) {

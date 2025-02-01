@@ -215,7 +215,6 @@ public class ArmSlideSubsystem extends VLRSubsystem<ArmSlideSubsystem> {
 
                 if (getTargetExtension() == TargetPosition.RETRACTED.extension) {
                     extensionMotor1.setPower(0);
-                    extensionMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 } else extensionMotor1.setPower(power);
 
             } else {

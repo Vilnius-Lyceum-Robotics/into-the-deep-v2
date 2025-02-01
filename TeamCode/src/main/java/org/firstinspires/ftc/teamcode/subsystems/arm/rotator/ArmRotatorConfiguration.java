@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 public class ArmRotatorConfiguration {
 
     public static String MOTOR_NAME = "MotorRotator";
-    public static String ENCODER_NAME = "MotorRightBack"; // PORT 3 CONTOR LHUB
+    public static String ENCODER_NAME = "MotorLeftBack";
 
     //ACCELERATION PROFILE CONSTANTS:
 //    public static double ACCELERATION = 8000;
@@ -55,7 +55,7 @@ public class ArmRotatorConfiguration {
 
 
 
-    public static double ERROR_MARGIN = 2;
+    public static double ERROR_MARGIN = 3;
 
     public static double MIN_ANGLE = 0;
     public static double MAX_ANGLE = 150;

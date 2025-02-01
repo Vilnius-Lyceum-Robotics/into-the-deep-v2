@@ -28,7 +28,7 @@ public class MotionProfile {
     private boolean isTelemetryEnabled = false;
 
     private final PIDController pid;
-    private boolean reachedPosition = true;
+    private boolean reachedPosition = false;
 
     private Type profileType;
 
@@ -66,6 +66,11 @@ public class MotionProfile {
 
     public void updateCoefficients(double acceleration, double deceleration, double maxVelocity, double p, double i, double d, double v, double a) {
         if (reachedPosition) {
+            this.maxVelocity = maxVelocity;
+            this.pid.setPID(p, i, d);
+            this.velocityGain = v;
+            this.accelerationGain = a;
+
             switch (profileType){
                 case ACCELERATION_LIMITED:
                     this.acceleration = acceleration;
@@ -77,11 +82,6 @@ public class MotionProfile {
                     this.jerkDeceleration = deceleration;
                     break;
             }
-
-            this.maxVelocity = maxVelocity;
-            this.pid.setPID(p, i, d);
-            this.velocityGain = v;
-            this.accelerationGain = a;
         }
     }
 

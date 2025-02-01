@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.testOpModes;
 
+import static org.firstinspires.ftc.teamcode.auto.pedroPathing.pathGeneration.MathFunctions.clamp;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -14,54 +16,51 @@ import com.roboctopi.cuttlefishftcbridge.devices.CuttleServo;
 
 @Config
 //@Disabled
-@TeleOp(name="AxonMicroCalibration")
+@TeleOp(name="BetterServoCalibration")
 public class AxonCalibration extends OpMode
 {
-    private CuttleServo servo0;
-    private CuttleServo servo1;
-    private CuttleServo servo2;
-    private CuttleServo servo3;
-    private CuttleServo servo4;
-
+    private CuttleServo servo;
     private CuttleRevHub controlHub;
-    private CuttleRevHub expansionHub;
 
-    private AnalogInput analog0;
-    private AnalogInput analog1;
-
-    public static double position0 = 0;
-    public static double position1 = 0;
-    public static double position2 = 0;
-    public static double position3 = 0;
-    public static double position4 = 0;
-
+    private int currentPort = 0;
+    private boolean prevState = false;
+    private boolean prevUP = false;
+    private boolean prevDown = false;
+    private double location = 0;
 
     @Override
     public void init() {
-        //expansionHub = new CuttleRevHub(hardwareMap, "Expansion Hub 2");
         controlHub = new CuttleRevHub(hardwareMap, CuttleRevHub.HubTypes.CONTROL_HUB);
-
-        servo0 = new CuttleServo(controlHub, 1);
-        servo1 = new CuttleServo(controlHub, 2); //twist
-        servo2 = new CuttleServo(controlHub, 3); //angle
-        servo3 = new CuttleServo(controlHub, 4);
-        servo4 = new CuttleServo(controlHub, 5); //claw
-
-        analog0 = hardwareMap.get(AnalogInput.class, "analog0");
-        analog1 = hardwareMap.get(AnalogInput.class, "analog1");
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
     @Override
     public void loop() {
-        servo0.setPosition(position0);
-        servo1.setPosition(position1);
-        servo2.setPosition(position2);
-        servo3.setPosition(position3);
-        servo4.setPosition(position4);
 
-        telemetry.addData("0", analog0.getVoltage());
-        telemetry.addData("1", analog1.getVoltage());
+        if (gamepad1.a && !prevState){
+            currentPort ++;
+            if (currentPort > 5){
+                currentPort = 0;
+            }
+        }
+        prevState = gamepad1.a;
 
+
+        if (gamepad1.dpad_up && !prevUP){
+            location = clamp(location + 0.02, 0, 1);
+        }
+        prevUP = gamepad1.dpad_up;
+
+        if (gamepad1.dpad_down && !prevDown){
+            location = clamp(location - 0.02, 0, 1);
+        }
+        prevDown = gamepad1.dpad_down;
+
+
+        servo = new CuttleServo(controlHub, currentPort);
+        servo.setPosition(location);
+
+        telemetry.addData("ACTIVE ON PORT: ", currentPort);
+        telemetry.addData("TARGET POSITION: ", location);
     }
 }

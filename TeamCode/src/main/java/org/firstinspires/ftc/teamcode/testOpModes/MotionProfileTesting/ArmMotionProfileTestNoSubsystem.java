@@ -89,7 +89,7 @@ public class ArmMotionProfileTestNoSubsystem extends LinearOpMode
             double feedForwardPower = Math.cos(Math.toRadians(currentAngle)) * FEEDFORWARD_GAIN;
             double power = motionProfile.getPower(currentAngle) + feedForwardPower;
 
-            motor.setPower(power);
+            //motor.setPower(power);
             telemetry.update();
         }
 

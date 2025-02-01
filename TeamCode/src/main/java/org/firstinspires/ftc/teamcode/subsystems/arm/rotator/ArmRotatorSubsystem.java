@@ -6,6 +6,8 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.helpers.utils.MotionProfile;
 import org.firstinspires.ftc.teamcode.subsystems.arm.ArmState;
@@ -24,6 +26,10 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
 
     private boolean motorResetEnabled = false;
     private double feedForwardGain = FEEDFORWARD_GAIN;
+
+    private boolean reachedPosition = true;
+    private boolean prevReachedPosition = true;
+    private ElapsedTime timer = new ElapsedTime();
 
 
     public static double mapToRange(double value, double minInput, double maxInput, double minOutput, double maxOutput) {
@@ -53,7 +59,7 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
                 ACCELERATION_JERK,
                 DECELERATION_JERK,
                 MAX_VELOCITY,
-                0,
+                ERROR_MARGIN,
                 FEEDBACK_PROPORTIONAL_GAIN,
                 FEEDBACK_INTEGRAL_GAIN,
                 FEEDBACK_DERIVATIVE_GAIN,
@@ -61,6 +67,7 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
                 ACCELERATION_GAIN);
 
         motionProfile.enableTelemetry(true);
+        timer.reset();
     }
 
 
@@ -113,7 +120,7 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
         double maxVelocity = mapToRange(slidePosition, 0, 1, MAX_VELOCITY, EXTENDED_MAX_VELOCITY);
         double feedforward = mapToRange(slidePosition, 0, 1, FEEDFORWARD_GAIN, EXTENDED_FEEDFORWARD_GAIN);
 
-        motionProfile.updateCoefficients(acceleration, deceleration, maxVelocity, p, i, d, v, a);
+        if (slideSubsystem.reachedTargetPositionNoOverride()) motionProfile.updateCoefficients(acceleration, deceleration, maxVelocity, p, i, d, v, a);
         feedForwardGain = feedforward;
     }
 
@@ -143,7 +150,14 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
 
         if (slideSubsystem.getOperationMode() == ArmSlideConfiguration.OperationMode.NORMAL) {
             setDefaultCoefficients();
-            if (motionProfile.getTargetPosition() == TargetAngle.RETRACT.angleDegrees && reachedTargetPosition()){
+
+            boolean reachedTarget = reachedTargetPosition();
+            if (!reachedTarget || !prevReachedPosition){
+                timer.reset();
+            }
+            prevReachedPosition = reachedTarget;
+
+            if (reachedTarget && motionProfile.getTargetPosition() == TargetAngle.RETRACT.angleDegrees && timer.seconds() > 3){
                 power = 0;
             }
         } else setHangCoefficients();

@@ -7,19 +7,19 @@ public class ArmSlideConfiguration {
     public static String MOTOR_NAME_0 = "MotorArm1";
     public static String MOTOR_NAME_1 = "MotorArm2";
     public static String MOTOR_NAME_2 = "MotorArm3";
-    public static String ENCODER_NAME = "MotorRotator";
+    public static String ENCODER_NAME = "MotorRightBack";
 
     public static String LIMIT_SW_NAME = "SlideLimit";
 
-    public static double ACCELERATION_JERK = 100000;
-    public static double DECELERATION_JERK = 80000;
-    public static double MAX_VELOCITY = 2300;
-    public static double FEEDBACK_PROPORTIONAL_GAIN = 0.0085;
-    public static double FEEDBACK_INTEGRAL_GAIN = 0;
-    public static double FEEDBACK_DERIVATIVE_GAIN = 0.0003;
+    public static double ACCELERATION_JERK = 700000;
+    public static double DECELERATION_JERK = 480000;
+    public static double MAX_VELOCITY = 3100;
+    public static double FEEDBACK_PROPORTIONAL_GAIN = 0.0255;
+    public static double FEEDBACK_INTEGRAL_GAIN = 0.000001;
+    public static double FEEDBACK_DERIVATIVE_GAIN = 0.0004;
     public static double FEED_FORWARD_GAIN = 0.1;
-    public static double VELOCITY_GAIN = 0.00015;
-    public static double ACCELERATION_GAIN = 0.00001;
+    public static double VELOCITY_GAIN = 0.0002;
+    public static double ACCELERATION_GAIN = 0.000016;
 
 
     public static double ACCELERATION_HANG = 1000;
