@@ -15,8 +15,8 @@ public class FollowPath extends CommandBase {
     private static Follower follower;
     private PathChain pathChain = null;
     private static Point lastPoint;
-    public static double translationalErrorConstraint = 0.01;
-    public static double headingErrorConstraint = Math.PI / 360;
+    public static double translationalErrorConstraint = 0.1;
+    public static double headingErrorConstraint = Math.PI / (360 * 2);
 
 
     public FollowPath(int constantHeading, Point point) {
@@ -32,6 +32,25 @@ public class FollowPath extends CommandBase {
                 .build();
         lastPoint = point;
     }
+
+    public FollowPath(int firstHeading, int secondHeading, Point point, double timeoutMs) {
+        pathChain = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                lastPoint,
+                                point
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(firstHeading), Math.toRadians(secondHeading))
+                .setPathEndTranslationalConstraint(translationalErrorConstraint)
+                .setPathEndHeadingConstraint(headingErrorConstraint)
+                .setPathEndTimeoutConstraint(timeoutMs)
+                .setPathEndVelocityConstraint(0.1)
+                //.setPathEndTValueConstraint(0)
+                .build();
+        lastPoint = point;
+    }
+
+
 
     public FollowPath(int constantHeading, Point... points) {
         pathChain = follower.pathBuilder().addPath(new BezierCurve(
@@ -72,6 +91,16 @@ public class FollowPath extends CommandBase {
                 .setLinearHeadingInterpolation(Math.toRadians(startHeading), Math.toRadians(endHeading))
                 .setPathEndHeadingConstraint(Math.toRadians(1))
                 .setPathEndTranslationalConstraint(translationalErrorConstraint)
+                .build();
+        lastPoint = point;
+    }
+
+    public FollowPath(int startHeading, int endHeading, Point point, double tValue, boolean dontmatter) {
+        pathChain = follower.pathBuilder().addPath(new BezierLine(lastPoint, point))
+                .setLinearHeadingInterpolation(Math.toRadians(startHeading), Math.toRadians(endHeading))
+                .setPathEndHeadingConstraint(Math.toRadians(1))
+                .setPathEndTranslationalConstraint(translationalErrorConstraint)
+                .setPathEndTValueConstraint(tValue)
                 .build();
         lastPoint = point;
     }
