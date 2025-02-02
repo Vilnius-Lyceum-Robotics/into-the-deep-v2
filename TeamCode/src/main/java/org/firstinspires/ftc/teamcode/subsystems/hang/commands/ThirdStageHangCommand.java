@@ -45,6 +45,7 @@ public class ThirdStageHangCommand extends SequentialCommandGroup {
 
 
                 new WaitUntilCommand(gamepadCondition),
+
                 new SetArmOperationMode(ArmSlideConfiguration.OperationMode.HANG),
                 new InstantCommand(()-> VLRSubsystem.getRotator().setHangCoefficients()),
 
@@ -55,22 +56,18 @@ public class ThirdStageHangCommand extends SequentialCommandGroup {
                 new SetHangPosition(HangConfiguration.TargetPosition.UP),
 
                 new WaitUntilCommand(()-> VLRSubsystem.getInstance(HangSubsystem.class).analogFeedbackThresholdReached()),
+                new WaitCommand(50),
 
-//                new ParallelRaceGroup(
-//                        new WaitUntilCommand(()-> VLRSubsystem.getSlides().reachedTargetPosition()),
-//                ),
-//
 
                 new SetSlideExtension(0.3),
+                new WaitCommand(2000),
+
+
                 new SetArmOperationMode(ArmSlideConfiguration.OperationMode.NORMAL),
-                new SetRotatorAngle(90),
-
-
-                new WaitCommand(100000000),
-
-
                 new InstantCommand(()-> VLRSubsystem.getRotator().setDefaultCoefficients()),
-                new WaitCommand(100),
+
+
+                new SetRotatorAngle(90),
 
                 new SetSlideExtension(0.29),
                 new WaitCommand(300),
