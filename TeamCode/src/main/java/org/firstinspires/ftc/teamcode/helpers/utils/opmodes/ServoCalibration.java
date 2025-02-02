@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp
+@TeleOp(name = "ServoCalibration", group = "Utils")
 @Photon
 public class ServoCalibration extends LinearOpMode {
     private boolean prevState = false;
@@ -24,10 +24,10 @@ public class ServoCalibration extends LinearOpMode {
 
 
             if (gamepad1.a && !prevState) {
-                 current_i++;
-                 current_i %= servoNames.length;
-                 location = 0;
-                 prevState = gamepad1.a;
+                current_i++;
+                current_i %= servoNames.length;
+                location = 0;
+                prevState = gamepad1.a;
             }
 
             if (gamepad1.dpad_up) {
