@@ -135,7 +135,7 @@ public class ArmSlideSubsystem extends VLRSubsystem<ArmSlideSubsystem> {
                 MAX_VELOCITY_HANG,
                 FEEDBACK_PROPORTIONAL_GAIN_HANG,
                 FEEDBACK_INTEGRAL_GAIN_HANG,
-                FEEDBACK_DERIVATIVE_GAIN,
+                FEEDBACK_DERIVATIVE_GAIN_HANG,
                 VELOCITY_GAIN_HANG,
                 ACCELERATION_GAIN_HANG);
     }
@@ -206,29 +206,29 @@ public class ArmSlideSubsystem extends VLRSubsystem<ArmSlideSubsystem> {
         double power = motionProfile.getPower(getPosition()) + feedForwardPower;
 
 
-        if (operationMode == OperationMode.NORMAL) {
-            setDefaultCoefficients();
+        if (!overridePower) {
+            if (operationMode == OperationMode.NORMAL) {
+                setDefaultCoefficients();
 
-            if (reachedTargetPositionNoOverride()) {
-                extensionMotor0.setPower(0);
-                extensionMotor2.setPower(0);
+                if (reachedTargetPositionNoOverride()) {
+                    extensionMotor0.setPower(0);
+                    extensionMotor2.setPower(0);
 
-                if (getTargetExtension() == TargetPosition.RETRACTED.extension) {
-                    extensionMotor1.setPower(0);
-                } else extensionMotor1.setPower(power);
+                    if (getTargetExtension() == TargetPosition.RETRACTED.extension) {
+                        extensionMotor1.setPower(0);
+                    } else extensionMotor1.setPower(power);
 
+                } else {
+                    extensionMotor0.setPower(power);
+                    extensionMotor1.setPower(power);
+                    extensionMotor2.setPower(power);
+                }
             } else {
+                setHangCoefficients();
                 extensionMotor0.setPower(power);
                 extensionMotor1.setPower(power);
                 extensionMotor2.setPower(power);
             }
-        }
-
-        else{
-            setHangCoefficients();
-            extensionMotor0.setPower(power);
-            extensionMotor1.setPower(power);
-            extensionMotor2.setPower(power);
         }
     }
 }

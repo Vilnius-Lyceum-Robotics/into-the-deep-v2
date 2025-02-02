@@ -107,7 +107,22 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
                 ACCELERATION_GAIN);
     }
 
+
     public void setDefaultCoefficients() {
+        feedForwardGain = FEEDFORWARD_GAIN;
+        motionProfile.updateCoefficients(
+                ACCELERATION_JERK,
+                DECELERATION_JERK,
+                MAX_VELOCITY,
+                FEEDBACK_PROPORTIONAL_GAIN,
+                FEEDBACK_INTEGRAL_GAIN,
+                FEEDBACK_DERIVATIVE_GAIN,
+                VELOCITY_GAIN,
+                ACCELERATION_GAIN);
+    }
+
+
+    public void setMappedCoefficients() {
         double slidePosition = slideSubsystem.getExtension();
         double p = mapToRange(slidePosition, 0, 1, FEEDBACK_PROPORTIONAL_GAIN, EXTENDED_FEEDBACK_PROPORTIONAL_GAIN);
         double i = mapToRange(slidePosition, 0, 1, FEEDBACK_INTEGRAL_GAIN, EXTENDED_FEEDBACK_INTEGRAL_GAIN);
@@ -120,7 +135,7 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
         double maxVelocity = mapToRange(slidePosition, 0, 1, MAX_VELOCITY, EXTENDED_MAX_VELOCITY);
         double feedforward = mapToRange(slidePosition, 0, 1, FEEDFORWARD_GAIN, EXTENDED_FEEDFORWARD_GAIN);
 
-        if (slideSubsystem.reachedTargetPositionNoOverride()) motionProfile.updateCoefficients(acceleration, deceleration, maxVelocity, p, i, d, v, a);
+        motionProfile.updateCoefficients(acceleration, deceleration, maxVelocity, p, i, d, v, a);
         feedForwardGain = feedforward;
     }
 
@@ -160,11 +175,9 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
             if (reachedTarget && motionProfile.getTargetPosition() == TargetAngle.RETRACT.angleDegrees && timer.seconds() > 3){
                 power = 0;
             }
-        } else setHangCoefficients();
+        }
 
         motor.setPower(power);
-
-        if (!slideSubsystem.getPowerOverride()) slideSubsystem.periodic(currentAngle);
-        else slideSubsystem.checkLimitSwitch();
+        slideSubsystem.periodic(currentAngle);
     }
 }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.hang.commands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -10,9 +11,12 @@ public class ForceCalibrateSlides extends SequentialCommandGroup {
     public ForceCalibrateSlides(){
         addRequirements(VLRSubsystem.getSlides());
         addCommands(
+                new InstantCommand(()-> VLRSubsystem.getSlides().setMotorPower(0)),
                 new InstantCommand(()-> VLRSubsystem.getSlides().setPowerOverride(true)),
-                new InstantCommand(()-> VLRSubsystem.getSlides().setMotorPower(-0.5)),
-                new WaitCommand(500),
+                new WaitCommand(1000),
+                new PerpetualCommand(new InstantCommand(()-> VLRSubsystem.getSlides().setMotorPower(-0.4))
+                        ).withTimeout(400),
+
                 new InstantCommand(()-> VLRSubsystem.getSlides().setMotorPower(0)),
                 new InstantCommand(()-> VLRSubsystem.getSlides().setPowerOverride(false))
         );

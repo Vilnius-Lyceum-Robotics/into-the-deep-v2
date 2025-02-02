@@ -32,6 +32,7 @@ public class HangSubsystem extends VLRSubsystem<HangSubsystem> implements HangCo
 
         telemetry.addData("HANG_LEFT_ANALOG_ANGLE: ", getAngle(analogLeft.getVoltage()));
         telemetry.addData("HANG_RIGHT_ANALOG_ANGLE: ", getAngle(analogRight.getVoltage()));
+        telemetry.addData("HANG_ANALOG_THRESHOLD_STATE: ", analogFeedbackThresholdReached());
     }
 
     public void setTargetPosition(TargetPosition target) {
