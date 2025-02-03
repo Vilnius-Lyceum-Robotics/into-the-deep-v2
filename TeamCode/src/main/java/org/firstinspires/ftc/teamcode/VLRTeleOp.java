@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -48,18 +50,28 @@ public class VLRTeleOp extends VLRLinearOpMode {
         ass.setMotorPower(0);
         ass.checkLimitSwitch();
 
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         waitForStart();
         // since judges are pizdabolai
+        //ass.setPowerOverride(true);
 
         while (opModeIsActive()) {
+
             primaryDriver.update();
             secondaryDriver.update();
+
+            //double power = gamepad2.left_stick_y;
+            //ass.setMotorPower(power);
+
 
             if (GlobalConfig.DEBUG_MODE) {
                 telemetry.addData("current state", ArmState.get());
 //                telemetry.addData("Slide pos", ass.getPosition());
             }
+            //telemetry.addData("POWER OVERRIDE FOR COOKED HANG: ", power);
             telemetry.update();
+
         }
     }
 }

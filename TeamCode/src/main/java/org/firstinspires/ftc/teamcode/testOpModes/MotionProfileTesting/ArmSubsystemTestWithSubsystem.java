@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.testOpModes.MotionProfileTesting;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,10 +13,11 @@ import org.firstinspires.ftc.teamcode.helpers.opmode.VLRLinearOpMode;
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.arm.slide.ArmSlideConfiguration;
 import org.firstinspires.ftc.teamcode.subsystems.arm.slide.ArmSlideSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.chassis.Chassis;
 
 @Photon
 @Config
-@TeleOp()
+@TeleOp
 
 public class ArmSubsystemTestWithSubsystem extends VLRLinearOpMode {
     ArmRotatorSubsystem armSubsystem;
@@ -27,7 +30,7 @@ public class ArmSubsystemTestWithSubsystem extends VLRLinearOpMode {
 
     @Override
     public void run() {
-        VLRSubsystem.requireSubsystems(ArmRotatorSubsystem.class, ArmSlideSubsystem.class);
+        VLRSubsystem.requireSubsystems(ArmRotatorSubsystem.class, ArmSlideSubsystem.class, Chassis.class);
         VLRSubsystem.initializeAll(hardwareMap);
 
         armSubsystem = VLRSubsystem.getRotator();

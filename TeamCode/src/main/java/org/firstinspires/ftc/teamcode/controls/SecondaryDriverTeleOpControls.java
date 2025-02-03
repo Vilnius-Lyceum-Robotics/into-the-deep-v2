@@ -60,9 +60,9 @@ public class SecondaryDriverTeleOpControls extends DriverControls {
         add(new ButtonCtl(GamepadKeys.Button.DPAD_LEFT, ButtonCtl.Trigger.WAS_JUST_PRESSED, true, (Boolean e) -> cs.schedule(new ToggleClawAngle())));
 
         add(new ButtonCtl(GamepadKeys.Button.LEFT_BUMPER, ButtonCtl.Trigger.WAS_JUST_PRESSED, true, (Boolean f) -> cs.schedule(new ResetRotatorMotor())));
-
-        addRightStickHandler((Double x, Double y) -> incrementClaw(y));
-        addLeftStickHandler((Double x, Double y) -> incrementSlidePosition(x));
+//
+//        addRightStickHandler((Double x, Double y) -> incrementClaw(y));
+//        addLeftStickHandler((Double x, Double y) -> incrementSlidePosition(x));
 
         addVibration(ArmOverrideState::get);
     }

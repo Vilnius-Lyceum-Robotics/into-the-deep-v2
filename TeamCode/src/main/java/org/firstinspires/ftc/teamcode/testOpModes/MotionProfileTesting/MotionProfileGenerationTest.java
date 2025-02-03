@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.helpers.utils.MotionState;
 
 
 @Config
-@Disabled
+//@Disabled
 @TeleOp()
 public class MotionProfileGenerationTest extends OpMode
 {
@@ -24,7 +24,7 @@ public class MotionProfileGenerationTest extends OpMode
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        motionProfile = new MotionProfile(telemetry, "test", MotionProfile.Type.JERK_LIMITED, 2, 1, 8, 0, 0, 0, 0, 0, 0);
+        motionProfile = new MotionProfile(telemetry, "test", MotionProfile.Type.ACCELERATION_LIMITED, 2, 1, 8, 0, 0, 0, 0, 0, 0);
     }
 
 
@@ -34,7 +34,8 @@ public class MotionProfileGenerationTest extends OpMode
             startTime = System.nanoTime();
             prevTarget = targetPosition;
         }
-        MotionState motionState = motionProfile.computeJerkMotionState(targetPosition, (System.nanoTime() - startTime) / Math.pow(10, 9));
+        MotionState motionState = motionProfile.computeAccelerationMotionState(targetPosition, (System.nanoTime() - startTime) / Math.pow(10, 9));
+
         telemetry.addData("position", motionState.position);
         telemetry.addData("velocity", motionState.velocity);
         telemetry.addData("acceleration", motionState.acceleration);
