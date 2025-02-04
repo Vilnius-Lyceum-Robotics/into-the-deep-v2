@@ -13,11 +13,13 @@ import org.firstinspires.ftc.teamcode.subsystems.chassis.Chassis;
 import org.firstinspires.ftc.teamcode.subsystems.claw.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.vision.Vision;
 @Config
-@TeleOp(name = "Test NeoPixel", group = "Test")
+@TeleOp(name = "AAAA Test NeoPixel", group = "Test")
 public class TestNeoPixelOpMode extends VLRLinearOpMode {
 
     NeoPixelSubsystem neoPixelSubsystem;
     public static NeoPixelConfiguration.Colour colour = NeoPixelConfiguration.Colour.RED;
+    public static NeoPixelConfiguration.Effect effect = NeoPixelConfiguration.Effect.SOLID_COLOR;
+    public static double effectTime = 1;
     @Override
     public void run() {
         // Initialize the I2C device
@@ -33,6 +35,8 @@ public class TestNeoPixelOpMode extends VLRLinearOpMode {
 
         while (opModeIsActive()) {
             neoPixelSubsystem.setColor(colour);
+            neoPixelSubsystem.setEffect(effect);
+            neoPixelSubsystem.setEffectTime(effectTime);
         }
     }
 }
