@@ -19,7 +19,7 @@ public class NeoPixelDriver extends I2cDeviceSynchDevice<I2cDeviceSynch> {
     private static final int BUF_LENGTH = 0x03;
     private static final int BUF = 0x04;
     private static final int SHOW = 0x05;
-    public static int COLOR_DIV_COEF = 1;
+    public static int COLOR_DIV_COEF = 2;
 
     int currentMax = 0;
     byte[] colorMap = new byte[170 * 3];
@@ -32,13 +32,13 @@ public class NeoPixelDriver extends I2cDeviceSynchDevice<I2cDeviceSynch> {
 
 
     byte[] buffLengthData = new byte[3];
-    byte[] bufferData;
+    byte[][] bufferData;
+    int packageCount = 0;
 
     public void setColor(int pixel, int r, int g, int b) {
         int realLength = (3 * pixel);
         buffLengthData[0] = (byte) BUF_LENGTH;
         buffLengthData[1] = 0;
-        buffLengthData[2] = (byte) realLength;
         int realR = r / COLOR_DIV_COEF;
         int realG = g / COLOR_DIV_COEF;
         int realB = b / COLOR_DIV_COEF;
@@ -47,22 +47,45 @@ public class NeoPixelDriver extends I2cDeviceSynchDevice<I2cDeviceSynch> {
         colorMap[realLength - 2] = (byte) realR;
         colorMap[realLength - 1] = (byte) realB;
 
-        if (realLength > currentMax) {
-            currentMax = realLength;
+        currentMax = Math.max(realLength, currentMax);
+
+
+        //bufferData[2] = (byte) 4;
+        packageCount = (int)Math.ceil(currentMax/22.0);
+        bufferData = new byte[packageCount][25];
+
+        buffLengthData[2] = (byte) (22*packageCount);
+
+
+        for(int i = 0; i<packageCount;i++)
+        {
+
+            bufferData[i][0] = (byte) BUF;
+            bufferData[i][2] = (byte) (i*22);
+
+            for (int j = 0; j < 22; j++) {
+
+
+                bufferData[i][3 + j] = colorMap[i*22+j];
+            }
+
         }
-        bufferData = new byte[3 + currentMax];
-        bufferData[0] = (byte) BUF;
-        bufferData[2] = (byte) 4;
-        for (int i = 0; i < currentMax; i++) {
-            bufferData[3 + i] = colorMap[i];
-        }
+
+
+
+
     }
 
 
     public void show() {
+        System.out.println("IN SHOW WTF");
         byte[] data = {(byte) SHOW};
         deviceClient.write(BASE, buffLengthData);
-        deviceClient.write(BASE, bufferData);
+        for(int i = 0; i<packageCount;i++)
+        {
+            deviceClient.write(BASE, bufferData[i]);
+            System.out.println(bufferData[i]);
+        }
         deviceClient.write(BASE, data);
     }
 

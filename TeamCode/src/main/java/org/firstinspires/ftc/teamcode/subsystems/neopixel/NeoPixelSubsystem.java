@@ -45,11 +45,10 @@ public class NeoPixelSubsystem extends VLRSubsystem<NeoPixelSubsystem> implement
             case SOLID_COLOR:
                 for (int i = 1; i < NeoPixelConfiguration.ledCount + 1; i++) {
                     neoPixel.setColor(i, colour.r, colour.g, colour.b);
-                    System.out.println("linanguli");
+                    //System.out.println("linanguli");
                 }
                 break;
             case BREATHE:
-                int realr, realg, realb;
                 double sinreiksmekartvienasduastuonibe128 = (Math.sin(2 * Math.PI * timer.seconds()/ effectTime) + 1)/2.0;
 
                 double sinR = colour.r * sinreiksmekartvienasduastuonibe128;

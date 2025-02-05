@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 
 public interface NeoPixelConfiguration {
-    public int ledCount = 15;
+    public int ledCount = 37;
     String NeoPixelName = "NeoPixel";
 
     public enum Effect
