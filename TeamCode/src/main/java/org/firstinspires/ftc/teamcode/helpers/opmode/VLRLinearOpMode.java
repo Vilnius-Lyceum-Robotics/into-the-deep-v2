@@ -21,8 +21,9 @@ public abstract class VLRLinearOpMode extends LinearOpMode {
         VLRSubsystem.clearSubsystems(); // Clear all subsystems
         executorService = Executors.newCachedThreadPool();
 
-        commandRunner = new CommandRunner(this::opModeIsActive);
+        commandRunner = new CommandRunner(this::opModeIsActive, hardwareMap);
         executorService.submit(commandRunner);
+
 
         this.run();
         CommandScheduler.getInstance().reset(); // reset command scheduler -- clear all previous commands
