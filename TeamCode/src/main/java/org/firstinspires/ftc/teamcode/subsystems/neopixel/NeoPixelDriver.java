@@ -7,19 +7,24 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynchDevice;
 import com.qualcomm.robotcore.hardware.configuration.annotations.DeviceProperties;
 import com.qualcomm.robotcore.hardware.configuration.annotations.I2cDeviceType;
 
+import org.apache.commons.lang3.SerializationUtils;
+
+import java.util.Arrays;
+
 @SuppressWarnings({"WeakerAccess", "unused"})
 @Config
 @I2cDeviceType
 @DeviceProperties(name = "Adafruit I2C NeoPixel Driver", xmlTag = "NeoPixel")
 public class NeoPixelDriver extends I2cDeviceSynchDevice<I2cDeviceSynch> {
     private static final int pin = 15;
+    private static final int PACKET_SIZE = 22;
     private static final int BASE = 0x0E;
     private static final int PIN = 0x01;
     private static final int SPEED = 0x02;
     private static final int BUF_LENGTH = 0x03;
     private static final int BUF = 0x04;
     private static final int SHOW = 0x05;
-    public static int COLOR_DIV_COEF = 2;
+
 
     int currentMax = 0;
     byte[] colorMap = new byte[170 * 3];
@@ -33,28 +38,21 @@ public class NeoPixelDriver extends I2cDeviceSynchDevice<I2cDeviceSynch> {
 
     byte[] buffLengthData = new byte[3];
     byte[][] bufferData;
+    byte[][] prevBufferData;
     int packageCount = 0;
 
     public void setColor(int pixel, int r, int g, int b) {
         int realLength = (3 * pixel);
         buffLengthData[0] = (byte) BUF_LENGTH;
         buffLengthData[1] = 0;
-        int realR = r / COLOR_DIV_COEF;
-        int realG = g / COLOR_DIV_COEF;
-        int realB = b / COLOR_DIV_COEF;
-        //first 2 bytes for offset, bet palieku 0
-        colorMap[realLength - 3] = (byte) realG;
-        colorMap[realLength - 2] = (byte) realR;
-        colorMap[realLength - 1] = (byte) realB;
-
+        colorMap[realLength - 3] = (byte) g;
+        colorMap[realLength - 2] = (byte) r;
+        colorMap[realLength - 1] = (byte) b;
         currentMax = Math.max(realLength, currentMax);
+        packageCount = (int)Math.ceil(currentMax/(double)PACKET_SIZE);
+        bufferData = new byte[packageCount][PACKET_SIZE+3];
 
-
-        //bufferData[2] = (byte) 4;
-        packageCount = (int)Math.ceil(currentMax/22.0);
-        bufferData = new byte[packageCount][25];
-
-        buffLengthData[2] = (byte) (22*packageCount);
+        buffLengthData[2] = (byte) (PACKET_SIZE*packageCount);
 
 
         for(int i = 0; i<packageCount;i++)
@@ -63,10 +61,8 @@ public class NeoPixelDriver extends I2cDeviceSynchDevice<I2cDeviceSynch> {
             bufferData[i][0] = (byte) BUF;
             bufferData[i][2] = (byte) (i*22);
 
-            for (int j = 0; j < 22; j++) {
-
-
-                bufferData[i][3 + j] = colorMap[i*22+j];
+            for (int j = 0; j < PACKET_SIZE; j++) {
+                bufferData[i][3 + j] = colorMap[i*PACKET_SIZE+j];
             }
 
         }
@@ -78,15 +74,19 @@ public class NeoPixelDriver extends I2cDeviceSynchDevice<I2cDeviceSynch> {
 
 
     public void show() {
-        System.out.println("IN SHOW WTF");
-        byte[] data = {(byte) SHOW};
+        if(Arrays.deepEquals(prevBufferData, bufferData)) return;
+
+        byte[] shower = {(byte) SHOW};
         deviceClient.write(BASE, buffLengthData);
         for(int i = 0; i<packageCount;i++)
         {
             deviceClient.write(BASE, bufferData[i]);
-            System.out.println(bufferData[i]);
         }
-        deviceClient.write(BASE, data);
+        deviceClient.write(BASE, shower);
+
+        prevBufferData = SerializationUtils.clone(bufferData);
+
+
     }
 
 

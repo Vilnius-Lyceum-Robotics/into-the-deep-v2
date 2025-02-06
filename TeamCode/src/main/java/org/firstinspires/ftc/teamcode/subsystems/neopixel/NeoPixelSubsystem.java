@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.neopixel;
 
+import static com.arcrobotics.ftclib.util.MathUtils.clamp;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -11,6 +13,7 @@ public class NeoPixelSubsystem extends VLRSubsystem<NeoPixelSubsystem> implement
     double effectTime = 1;
     private Colour colour = Colour.RED;
     private Effect effect = Effect.SOLID_COLOR;
+    public double brightness = 1.0;
 
     @Override
     protected void initialize(HardwareMap hardwareMap) {
@@ -30,12 +33,17 @@ public class NeoPixelSubsystem extends VLRSubsystem<NeoPixelSubsystem> implement
         timer.reset();
     }
 
-    public void setEffectTime(double time)
-    {
-        if(this.effectTime == time)return;
+    public void setEffectTime(double time) {
+        if (this.effectTime == time) return;
         this.effectTime = time;
         timer.reset();
     }
+
+    public void setBrightness(double brightness)
+    {
+        this.brightness=brightness;
+    }
+
     ElapsedTime timer = new ElapsedTime();
 
 
@@ -44,31 +52,90 @@ public class NeoPixelSubsystem extends VLRSubsystem<NeoPixelSubsystem> implement
         switch (effect) {
             case SOLID_COLOR:
                 for (int i = 1; i < NeoPixelConfiguration.ledCount + 1; i++) {
-                    neoPixel.setColor(i, colour.r, colour.g, colour.b);
+                    neoPixel.setColor(i, (int) (brightness * colour.r), (int) (brightness * colour.g), (int) (brightness * colour.b));
                     //System.out.println("linanguli");
                 }
                 break;
             case BREATHE:
-                double sinreiksmekartvienasduastuonibe128 = (Math.sin(2 * Math.PI * timer.seconds()/ effectTime) + 1)/2.0;
+                double multiplier = (Math.sin(2 * Math.PI * timer.seconds() / effectTime) + 1) / 2.0;
 
-                double sinR = colour.r * sinreiksmekartvienasduastuonibe128;
-                double sinG = colour.g * sinreiksmekartvienasduastuonibe128;
-                double sinB = colour.b * sinreiksmekartvienasduastuonibe128;
+                double sinR = brightness * colour.r * multiplier;
+                double sinG = brightness * colour.g * multiplier;
+                double sinB = brightness * colour.b * multiplier;
 
                 for (int i = 1; i < NeoPixelConfiguration.ledCount + 1; i++) {
                     neoPixel.setColor(i, (int) sinR, (int) sinG, (int) sinB);
+                }
+                try {
+                    Thread.sleep(15);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case BLINK:
                 boolean active = (timer.seconds() % effectTime) > (effectTime / 2);
 
 
-                double r = colour.r * (active ? 1 : 0);
-                double g = colour.g * (active ? 1 : 0);
-                double b = colour.b * (active ? 1 : 0);
+                double r = brightness * colour.r * (active ? 1 : 0);
+                double g = brightness * colour.g * (active ? 1 : 0);
+                double b = brightness * colour.b * (active ? 1 : 0);
 
                 for (int i = 1; i < NeoPixelConfiguration.ledCount + 1; i++) {
                     neoPixel.setColor(i, (int) r, (int) g, (int) b);
+                }
+
+                try {
+                    Thread.sleep(15);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case CHASE_FORWARD:
+//                int ledCount = (int)Math.floor(timer.seconds()/effectTime);
+//                ledCount = clamp(ledCount, 0, NeoPixelConfiguration.ledCount);
+//                for(int i = 0; i<ledCount; i++)
+//                {
+//                    neoPixel.setColor(i, (int) (brightness * colour.r), (int) (brightness * colour.g), (int) (brightness * colour.b));
+//                }
+//                try {
+//                    Thread.sleep(15);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+                double phaseForward = (timer.seconds() % effectTime) / effectTime;
+                int headForward = (int)(phaseForward * NeoPixelConfiguration.ledCount) + 1;
+
+                for (int i = 1; i <= NeoPixelConfiguration.ledCount; i++) {
+                    if (i == headForward) {
+                        neoPixel.setColor(i, (int)(brightness * colour.r), (int)(brightness * colour.g), (int)(brightness * colour.b));
+                    } else {
+                        neoPixel.setColor(i, 0, 0, 0); // Turn off other LEDs
+                    }
+                }
+
+                try {
+                    Thread.sleep(15);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case CHASE_BACKWARD:
+                double phaseBackward = (timer.seconds() % effectTime) / effectTime;
+                int headBackward = NeoPixelConfiguration.ledCount - (int)(phaseBackward * NeoPixelConfiguration.ledCount);
+
+
+                for (int i = 1; i <= NeoPixelConfiguration.ledCount; i++) {
+                    if (i == headBackward) {
+                        neoPixel.setColor(i, (int)(brightness * colour.r), (int)(brightness * colour.g), (int)(brightness * colour.b));
+                    } else {
+                        neoPixel.setColor(i, 0, 0, 0); // Turn off other LEDs
+                    }
+                }
+
+                try {
+                    Thread.sleep(15);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             default:
@@ -76,10 +143,6 @@ public class NeoPixelSubsystem extends VLRSubsystem<NeoPixelSubsystem> implement
         }
 
         neoPixel.show();
-        try {
-            Thread.sleep(15);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 }

@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 
 public interface NeoPixelConfiguration {
-    public int ledCount = 37;
+    public int ledCount = 20;
     String NeoPixelName = "NeoPixel";
 
     public enum Effect
@@ -12,6 +12,8 @@ public interface NeoPixelConfiguration {
         SOLID_COLOR,
         BREATHE,
         BLINK,
+        CHASE_FORWARD,
+        CHASE_BACKWARD,
         CRAZYMODE;
 
     }
