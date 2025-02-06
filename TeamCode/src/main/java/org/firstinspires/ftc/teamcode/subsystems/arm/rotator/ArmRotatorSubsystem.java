@@ -55,7 +55,7 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
         motionProfile = new MotionProfile(
                 FtcDashboard.getInstance().getTelemetry(),
                 "ARM",
-                MotionProfile.Type.ACCELERATION_LIMITED,
+                MotionProfile.Type.JERK_LIMITED,
                 ACCELERATION_JERK,
                 DECELERATION_JERK,
                 MAX_VELOCITY,
@@ -155,6 +155,7 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
 
     @Override
     public void periodic() {
+        System.out.println("rotator periodic");
         if (motorResetEnabled) return;
         encoderPosition = -thoughBoreEncoder.getCurrentPosition();
 
@@ -162,6 +163,7 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
 
         double feedForwardPower = Math.cos(Math.toRadians(currentAngle)) * feedForwardGain;
         double power = motionProfile.getPower(currentAngle) + feedForwardPower;
+        power = clamp(power, -1, 1);
 
         if (slideSubsystem.getOperationMode() == ArmSlideConfiguration.OperationMode.NORMAL) {
             setDefaultCoefficients();
@@ -172,7 +174,7 @@ public class ArmRotatorSubsystem extends VLRSubsystem<ArmRotatorSubsystem> {
             }
             prevReachedPosition = reachedTarget;
 
-            if (reachedTarget && motionProfile.getTargetPosition() == TargetAngle.RETRACT.angleDegrees && timer.seconds() > 3){
+            if (reachedTarget && motionProfile.getTargetPosition() == TargetAngle.RETRACT.angleDegrees && timer.seconds() > 1){
                 power = 0;
             }
         }
