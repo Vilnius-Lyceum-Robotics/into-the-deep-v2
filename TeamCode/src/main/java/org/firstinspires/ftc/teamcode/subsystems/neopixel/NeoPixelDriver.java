@@ -126,13 +126,9 @@ public class NeoPixelDriver extends I2cDeviceSynchDevice<I2cDeviceSynch> {
             // Send buffer length (16-bit)
             deviceClient.write(BASE, buffLengthData);
 
-            // Small delay to ensure device processes buffer length
-            sleep(1);
-
             // Send color data in packets
             for (int i = 0; i < packageCount; i++) {
                 deviceClient.write(BASE, bufferData[i]);
-                sleep(1);  // Small delay between packets
             }
 
             // Send show command
@@ -144,17 +140,6 @@ public class NeoPixelDriver extends I2cDeviceSynchDevice<I2cDeviceSynch> {
 
         } finally {
             i2cLock.unlock();
-        }
-    }
-
-    /**
-     * Helper method for thread sleep
-     */
-    private void sleep(long ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
         }
     }
 
