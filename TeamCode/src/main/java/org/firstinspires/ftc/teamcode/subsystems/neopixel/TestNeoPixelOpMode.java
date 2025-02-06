@@ -21,6 +21,8 @@ public class TestNeoPixelOpMode extends VLRLinearOpMode {
     public static NeoPixelConfiguration.Effect effect = NeoPixelConfiguration.Effect.SOLID_COLOR;
     public static double effectTime = 1;
     public static double brightness = 1;
+
+    public static int trailLength = 4;
     @Override
     public void run() {
         // Initialize the I2C device
@@ -39,6 +41,7 @@ public class TestNeoPixelOpMode extends VLRLinearOpMode {
             neoPixelSubsystem.setEffect(effect);
             neoPixelSubsystem.setEffectTime(effectTime);
             neoPixelSubsystem.setBrightness(brightness);
+            neoPixelSubsystem.setTrailLength(trailLength);
         }
     }
 }
