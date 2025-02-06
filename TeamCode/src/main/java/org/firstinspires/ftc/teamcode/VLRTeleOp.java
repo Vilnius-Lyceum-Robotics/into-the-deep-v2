@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.controls.PrimaryDriverTeleOpControls;
 import org.firstinspires.ftc.teamcode.controls.SecondaryDriverTeleOpControls;
+import org.firstinspires.ftc.teamcode.helpers.monitoring.LoopTimeMonitor;
 import org.firstinspires.ftc.teamcode.helpers.opmode.VLRLinearOpMode;
 import org.firstinspires.ftc.teamcode.helpers.subsystems.VLRSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.arm.rotator.ArmRotatorSubsystem;
@@ -26,8 +27,9 @@ import org.firstinspires.ftc.teamcode.subsystems.vision.Vision;
 @TeleOp(name = "VLRTeleOp", group = "!TELEOP")
 public class VLRTeleOp extends VLRLinearOpMode {
     // Controls
-    PrimaryDriverTeleOpControls primaryDriver;
-    SecondaryDriverTeleOpControls secondaryDriver;
+    private PrimaryDriverTeleOpControls primaryDriver;
+    private SecondaryDriverTeleOpControls secondaryDriver;
+    private LoopTimeMonitor loopTimeMonitor;
 
     @Override
     public void run() {
@@ -36,6 +38,9 @@ public class VLRTeleOp extends VLRLinearOpMode {
 
         // for testing only, remove for prod!!! this will ruin the performance of teleop
         //VLRSubsystem.getInstance(Vision.class).setEnabled(true);
+
+
+        loopTimeMonitor = new LoopTimeMonitor();
 
         ArmSlideSubsystem ass = VLRSubsystem.getInstance(ArmSlideSubsystem.class);
         System.out.println(ass);
@@ -58,8 +63,15 @@ public class VLRTeleOp extends VLRLinearOpMode {
         CommandScheduler.getInstance().schedule(new SetHangPosition(HangConfiguration.TargetPosition.DOWN));
 
         while (opModeIsActive()) {
+            loopTimeMonitor.loopStart();
+
             primaryDriver.update();
             secondaryDriver.update();
+
+            loopTimeMonitor.loopEnd();
+
+            double slowestLoopTimeAverage = loopTimeMonitor.getAverageTime(10, LoopTimeMonitor.ElementSelectionType.TOP_PERCENTILE_ELEMENTS);
+            System.out.println("MAIN THREAD SLOWEST LOOP TIME AVERAGE HZ: " + 1.0 / slowestLoopTimeAverage);
         }
     }
 }

@@ -6,6 +6,8 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.helpers.monitoring.LoopTimeMonitor;
+
 import java.util.List;
 
 /**
@@ -15,10 +17,12 @@ import java.util.List;
 public class CommandRunner implements Runnable {
     final OpModeRunningInterface runningInterface;
     private HardwareMap hardwareMap;
+    private LoopTimeMonitor loopTimeMonitor;
 
     public CommandRunner(OpModeRunningInterface runningInterface, HardwareMap hardwareMap) {
         this.runningInterface = runningInterface;
         this.hardwareMap = hardwareMap;
+        loopTimeMonitor = new LoopTimeMonitor();
     }
 
     public void run() {
@@ -37,10 +41,17 @@ public class CommandRunner implements Runnable {
         }
 
         while (runningInterface.isOpModeRunning()) {
+
+            loopTimeMonitor.loopStart();
             for (LynxModule hub : allHubs) {
                 hub.clearBulkCache();
             }
             CommandScheduler.getInstance().run();
+            loopTimeMonitor.loopEnd();
+
+            double slowestLoopTimeAverage = loopTimeMonitor.getAverageTime(10, LoopTimeMonitor.ElementSelectionType.TOP_PERCENTILE_ELEMENTS);
+
+            System.out.println("COMMAND THREAD SLOWEST LOOP TIME AVERAGE HZ: " + 1.0 / slowestLoopTimeAverage);
         }
     }
 }
