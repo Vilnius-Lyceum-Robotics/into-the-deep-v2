@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class BestSampleDeterminer {
-    private static final double X_THRESHOLD = 3.0; // inches
-    private static final double Y_THRESHOLD = 1.5; // inches
+    private static final double X_THRESHOLD = 4; // inches
+    private static final double Y_THRESHOLD = 4; // inches
     private static final double NEIGHBOR_PENALTY = 8.0;
 
     public static SampleOrientation determineBestSample(List<SampleOrientation> samples, Alliance alliance) {
