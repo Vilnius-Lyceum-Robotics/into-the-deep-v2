@@ -48,7 +48,7 @@ public class ThirdStageHangCommand extends SequentialCommandGroup {
                 new SetSlideExtension(0.2),
                 new WaitCommand(100),
 
-                new SetRotatorAngle(92.5),
+                new SetRotatorAngle(89.75),
                 new SetHangPosition(HangConfiguration.TargetPosition.UP),
                 new WaitCommand(50),
 
@@ -80,11 +80,10 @@ public class ThirdStageHangCommand extends SequentialCommandGroup {
 
                 new SetSlideExtension(0.04),
                 new WaitUntilCommand(() -> VLRSubsystem.getSlides().getExtension() < 0.79),
-                new SetRotatorAngle(145),
-                new WaitUntilCommand(() -> VLRSubsystem.getSlides().getExtension() < 0.45),
+                new SetRotatorAngle(133),
+                new WaitUntilCommand(() -> VLRSubsystem.getSlides().getExtension() < 0.28),
                 new SetHangPosition(HangConfiguration.TargetPosition.DOWN),
 
-                new WaitUntilCommand(() -> VLRSubsystem.getSlides().getExtension() < 0.4),
                 new SetRotatorAngle(35),
                 new WaitUntilCommand(() -> VLRSubsystem.getSlides().reachedTargetPosition()).withTimeout(3000),
 
