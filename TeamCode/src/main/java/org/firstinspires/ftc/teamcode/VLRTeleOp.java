@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.claw.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.hang.HangConfiguration;
 import org.firstinspires.ftc.teamcode.subsystems.hang.HangSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.hang.commands.SetHangPosition;
+import org.firstinspires.ftc.teamcode.subsystems.neopixel.NeoPixelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.vision.Vision;
 
 
@@ -34,7 +35,7 @@ public class VLRTeleOp extends VLRLinearOpMode {
 
     @Override
     public void run() {
-        VLRSubsystem.requireSubsystems(Chassis.class, ArmSlideSubsystem.class, ArmRotatorSubsystem.class, ClawSubsystem.class, HangSubsystem.class);
+        VLRSubsystem.requireSubsystems(Chassis.class, ArmSlideSubsystem.class, ArmRotatorSubsystem.class, ClawSubsystem.class, HangSubsystem.class, NeoPixelSubsystem.class);
         VLRSubsystem.initializeAll(hardwareMap);
 
         // for testing only, remove for prod!!! this will ruin the performance of teleop
