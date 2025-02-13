@@ -65,6 +65,7 @@ public class SecondaryDriverTeleOpControls extends DriverControls {
     }
 
     private void incrementSlidePosition(double input) {
+        if (Math.abs(input) < 0.1) { return; }
         System.out.printf("HANG SECOND: " + ArmState.isCurrentState(ArmState.State.HANG_SECOND_STAGE));
         System.out.printf("HANG INTAKE: " + (ArmState.isCurrentState(ArmState.State.SAMPLE_INTAKE) && !ArmState.isMoving() && !ArmOverrideState.get()));
         if (ArmState.isCurrentState(ArmState.State.HANG_SECOND_STAGE) || (ArmState.isCurrentState(ArmState.State.SAMPLE_INTAKE) && !ArmState.isMoving() && !ArmOverrideState.get())) {
